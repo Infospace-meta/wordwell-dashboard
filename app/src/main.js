@@ -1,19 +1,24 @@
-import { createApp } from "vue";
-import { createPinia } from "pinia";
-import router from "./router";
-import App from "./App.vue";
+import { createApp } from 'vue'
+import { createPinia } from 'pinia'
 
-/**styling */
-// import "./style.css";
-import "./assets/tailwind.css"; //tailwind
+import App from './App.vue'
+import router from './router'
 
-/**setup fake backend */
-import { fakeBackend } from "./helpers";
-fakeBackend();
+import CoreuiVue from '@coreui/vue'
+import CIcon from '@coreui/icons-vue'
+import { iconsSet as icons } from '@/assets/icons'
+import DocsComponents from '@/components/DocsComponents.vue'
+import DocsExample from '@/components/DocsExample.vue'
+import DocsIcons from '@/components/DocsIcons.vue'
 
-const app = createApp(App);
-const pinia = createPinia();
+const app = createApp(App)
+app.use(createPinia())
+app.use(router)
+app.use(CoreuiVue)
+app.provide('icons', icons)
+app.component('CIcon', CIcon)
+app.component('DocsComponents', DocsComponents)
+app.component('DocsExample', DocsExample)
+app.component('DocsIcons', DocsIcons)
 
-app.use(pinia);
-app.use(router);
-app.mount("#app");
+app.mount('#app')

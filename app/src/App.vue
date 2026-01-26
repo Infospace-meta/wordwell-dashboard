@@ -1,51 +1,42 @@
-<template>
-  <div class="min-h-screen bg-white">
-    <Header />
-    <div class="mt-4">
-      <RouterView />
-      <!-- LOGIN MODAL -->      
-      <div
-        v-if="auth.isLoginModalOpen"
-        class="modal-overlay"
-        id="login-form"
-        @click="closeModal()"
-      >
-        <div class="modal-content max-w-7xl" @click.stop>
-          <LoginEmail />
-        </div>
-      </div>
-    </div>
-    <Footer />
-  </div>
-</template>
-
 <script setup>
-import { RouterView } from "vue-router";
-import Header from "./components/Header.vue";
-import Footer from "./components/Footer.vue";
-import { useAuthStore } from "./store";
-import LoginEmail from "@/components/LoginEmail.vue";
+import { onBeforeMount } from 'vue'
+import { useColorModes } from '@coreui/vue'
 
-/**VARIABLES */
-const auth = useAuthStore();
+import { useThemeStore } from '@/stores/theme.js'
 
-/**FUNCTIONS*/
-const closeModal = () => {
-  auth.isLoginModalOpen = false;
-};
+const { isColorModeSet, setColorMode } = useColorModes(
+  'coreui-free-vue-admin-template-theme',
+)
+const currentTheme = useThemeStore()
+
+onBeforeMount(() => {
+  const urlParams = new URLSearchParams(window.location.href.split('?')[1])
+  let theme = urlParams.get('theme')
+
+  if (theme !== null && theme.match(/^[A-Za-z0-9\s]+/)) {
+    theme = theme.match(/^[A-Za-z0-9\s]+/)[0]
+  }
+
+  if (theme) {
+    setColorMode(theme)
+    return
+  }
+
+  if (isColorModeSet()) {
+    return
+  }
+
+  setColorMode(currentTheme.theme)
+})
 </script>
 
-<style scoped>
-.modal-overlay {
-  position: fixed;
-  z-index: 26;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.3);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+<template>
+  <router-view />
+</template>
+
+<style lang="scss">
+// Import Main styles for this application
+@use 'styles/style';
+// We use those styles to show code examples, you should remove them in your application.
+@use 'styles/examples';
 </style>
