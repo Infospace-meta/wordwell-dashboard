@@ -32,7 +32,7 @@ const options = {
 
 <template>
   <CRow :xs="{ gutter: 4 }">
-    <CCol :sm="6" :xl="4" :xxl="3">
+    <!-- <CCol :sm="6" :xl="4" :xxl="3">
       <CWidgetStatsD
         style="--cui-card-cap-bg: #3b5998"
         :values="[
@@ -62,8 +62,8 @@ const options = {
           />
         </template>
       </CWidgetStatsD>
-    </CCol>
-    <CCol :sm="6" :xl="4" :xxl="3">
+    </CCol> -->
+    <!-- <CCol :sm="6" :xl="4" :xxl="3">
       <CWidgetStatsD
         style="--cui-card-cap-bg: #00aced"
         :values="[
@@ -93,8 +93,8 @@ const options = {
           />
         </template>
       </CWidgetStatsD>
-    </CCol>
-    <CCol :sm="6" :xl="4" :xxl="3">
+    </CCol> -->
+    <!-- <CCol :sm="6" :xl="4" :xxl="3">
       <CWidgetStatsD
         style="--cui-card-cap-bg: #4875b4"
         :values="[
@@ -124,7 +124,7 @@ const options = {
           />
         </template>
       </CWidgetStatsD>
-    </CCol>
+    </CCol> -->
     <CCol :sm="6" :xl="4" :xxl="3">
       <CWidgetStatsD
         color="warning"
