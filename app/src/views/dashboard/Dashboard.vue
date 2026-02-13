@@ -1,4 +1,3 @@
-<!-- App.vue (or DashboardView.vue) -->
 <script setup>
 import { ref } from "vue";
 import DashboardHeader from "../../components/dashboard-page/DashboardHeader.vue";
