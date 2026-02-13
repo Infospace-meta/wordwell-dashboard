@@ -1,12 +1,12 @@
 <script setup>
-import { RouterLink } from 'vue-router'
+import { RouterLink } from "vue-router";
 
 // import { logo } from '@/assets/brand/InkWell-Writers-Logo'
-import { sygnet } from '@/assets/brand/sygnet'
-import { AppSidebarNav } from '@/components/AppSidebarNav.js'
-import { useSidebarStore } from '@/stores/sidebar.js'
+import { sygnet } from "@/assets/brand/sygnet";
+import { AppSidebarNav } from "@/components/AppSidebarNav.js";
+import { useSidebarStore } from "@/stores/sidebar.js";
 
-const sidebar = useSidebarStore()
+const sidebar = useSidebarStore();
 </script>
 
 <template>
@@ -24,7 +24,7 @@ const sidebar = useSidebarStore()
           <img
             src="../assets/brand/InkWell-Writers-Logo.png"
             alt="InkWell Writers Logo"
-             height="80" 
+            height="80"
           />
           <!-- <CIcon custom-class-name="sidebar-brand-full" :icon="logo" :height="32" /> -->
           <!-- <CIcon custom-class-name="sidebar-brand-narrow" :icon="sygnet" :height="32" /> -->

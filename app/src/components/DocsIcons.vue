@@ -3,7 +3,7 @@ import IconsImg from '@/assets/images/icons.webp'
 </script>
 
 <template>
-  <div class="bg-warning bg-opacity-10 border border-2 border-warning rounded mb-4">
+  <div class="bg-warning bg-opacity-10 border border-warning rounded mb-4">
     <div class="row d-flex align-items-center p-3 px-xl-4 flex-xl-nowrap">
       <div class="col-xl-auto col-12 d-none d-xl-block p-0">
         <img class="img-fluid" :src="IconsImg" width="160px" height="160px" alt="CoreUI Icons" />
