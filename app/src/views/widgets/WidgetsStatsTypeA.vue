@@ -26,10 +26,10 @@ onMounted(() => {
     <CCol :sm="6" :xl="4" :xxl="3">
       <CWidgetStatsA color="primary">
         <template #value
-          >26K
-          <span class="fs-6 fw-normal"> (-12.4% <CIcon icon="cil-arrow-bottom" />) </span>
+          >1,220
+          <span class="fs-6 fw-normal"></span>
         </template>
-        <template #title>Users</template>
+        <template #title>Total Orders</template>
         <template #action>
           <CDropdown placement="bottom-end">
             <CDropdownToggle color="transparent" class="p-0 text-white" :caret="false">
@@ -110,10 +110,10 @@ onMounted(() => {
     <CCol :sm="6" :xl="4" :xxl="3">
       <CWidgetStatsA color="info">
         <template #value
-          >$6.200
+          >845
           <span class="fs-6 fw-normal"> (40.9% <CIcon icon="cil-arrow-top" />) </span>
         </template>
-        <template #title>Income</template>
+        <template #title>Paid Orders</template>
         <template #action>
           <CDropdown placement="bottom-end">
             <CDropdownToggle color="transparent" class="p-0 text-white" :caret="false">
@@ -193,10 +193,10 @@ onMounted(() => {
     <CCol :sm="6" :xl="4" :xxl="3">
       <CWidgetStatsA color="warning">
         <template #value
-          >2.49%
+          >$12,540
           <span class="fs-6 fw-normal"> (84.7% <CIcon icon="cil-arrow-top" />) </span>
         </template>
-        <template #title>Conversion Rate</template>
+        <template #title>Revenue This Month</template>
         <template #action>
           <CDropdown placement="bottom-end">
             <CDropdownToggle color="transparent" class="p-0 text-white" :caret="false">

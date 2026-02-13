@@ -10,6 +10,7 @@ import { iconsSet as icons } from '@/assets/icons'
 import DocsComponents from '@/components/DocsComponents.vue'
 import DocsExample from '@/components/DocsExample.vue'
 import DocsIcons from '@/components/DocsIcons.vue'
+import '@/assets/tailwind.css'
 
 const app = createApp(App)
 app.use(createPinia())

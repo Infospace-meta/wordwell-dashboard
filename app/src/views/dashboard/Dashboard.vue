@@ -1,337 +1,199 @@
 <script setup>
-import avatar1 from '@/assets/images/avatars/1.jpg'
-import avatar2 from '@/assets/images/avatars/2.jpg'
-import avatar3 from '@/assets/images/avatars/3.jpg'
-import avatar4 from '@/assets/images/avatars/4.jpg'
-import avatar5 from '@/assets/images/avatars/5.jpg'
-import avatar6 from '@/assets/images/avatars/6.jpg'
-import MainChart from './MainChart.vue'
-import WidgetsStatsA from './../widgets/WidgetsStatsTypeA.vue'
-import WidgetsStatsD from './../widgets/WidgetsStatsTypeD.vue'
+import { ref } from "vue";
+import { Line } from "vue-chartjs";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Tooltip,
+  Filler,
+} from "chart.js";
 
-const progressGroupExample1 = [
-  { title: 'Monday', value1: 34, value2: 78 },
-  { title: 'Tuesday', value1: 56, value2: 94 },
-  { title: 'Wednesday', value1: 12, value2: 67 },
-  { title: 'Thursday', value1: 43, value2: 91 },
-  { title: 'Friday', value1: 22, value2: 73 },
-  { title: 'Saturday', value1: 53, value2: 82 },
-  { title: 'Sunday', value1: 9, value2: 69 },
-]
-const progressGroupExample2 = [
-  { title: 'Male', icon: 'cil-user', value: 53 },
-  { title: 'Female', icon: 'cil-user-female', value: 43 },
-]
-const progressGroupExample3 = [
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Tooltip,
+  Filler
+);
+
+/* -----------------------
+   MOCK DATA (Replace with API later)
+------------------------*/
+
+const stats = ref([
+  { title: "Total Orders", value: "1,220" },
+  { title: "Paid Orders", value: "845", extra: "+8% this week" },
+  { title: "In Progress", value: "32" },
+  { title: "Completed", value: "610" },
+  { title: "Revenue This Month", value: "$12,540", extra: "+15% this month" },
+]);
+
+const orders = ref([
   {
-    title: 'Organic Search',
-    icon: 'cib-google',
-    percent: 56,
-    value: '191,235',
-  },
-  { title: 'Facebook', icon: 'cib-facebook', percent: 15, value: '51,223' },
-  { title: 'Twitter', icon: 'cib-twitter', percent: 11, value: '37,564' },
-  { title: 'LinkedIn', icon: 'cib-linkedin', percent: 8, value: '27,319' },
-]
-const tableExample = [
-  {
-    avatar: { src: avatar1, status: 'success' },
-    user: {
-      name: 'Yiorgos Avraamu',
-      new: true,
-      registered: 'Jan 1, 2023',
-    },
-    country: { name: 'USA', flag: 'cif-us' },
-    usage: {
-      value: 50,
-      period: 'Jun 11, 2023 - Jul 10, 2023',
-      color: 'success',
-    },
-    payment: { name: 'Mastercard', icon: 'cib-cc-mastercard' },
-    activity: '10 sec ago',
+    id: "#10234",
+    email: "john.doe@example.com",
+    deadline: "Apr 25, 2026",
+    words: 1500,
+    amount: "$120.00",
+    status: "In Progress",
+    payment: "Paid",
   },
   {
-    avatar: { src: avatar2, status: 'danger' },
-    user: {
-      name: 'Avram Tarasios',
-      new: false,
-      registered: 'Jan 1, 2023',
-    },
-    country: { name: 'Brazil', flag: 'cif-br' },
-    usage: {
-      value: 22,
-      period: 'Jun 11, 2023 - Jul 10, 2023',
-      color: 'info',
-    },
-    payment: { name: 'Visa', icon: 'cib-cc-visa' },
-    activity: '5 minutes ago',
+    id: "#10212",
+    email: "sarah.smith@example.com",
+    deadline: "Apr 24, 2026",
+    words: 2000,
+    amount: "$180.00",
+    status: "Completed",
+    payment: "Paid",
   },
   {
-    avatar: { src: avatar3, status: 'warning' },
-    user: { name: 'Quintin Ed', new: true, registered: 'Jan 1, 2023' },
-    country: { name: 'India', flag: 'cif-in' },
-    usage: {
-      value: 74,
-      period: 'Jun 11, 2023 - Jul 10, 2023',
-      color: 'warning',
-    },
-    payment: { name: 'Stripe', icon: 'cib-cc-stripe' },
-    activity: '1 hour ago',
+    id: "#10198",
+    email: "mike.jones@example.com",
+    deadline: "Apr 23, 2026",
+    words: 750,
+    amount: "$75.00",
+    status: "Pending",
+    payment: "Paid",
   },
-  {
-    avatar: { src: avatar4, status: 'secondary' },
-    user: { name: 'Enéas Kwadwo', new: true, registered: 'Jan 1, 2023' },
-    country: { name: 'France', flag: 'cif-fr' },
-    usage: {
-      value: 98,
-      period: 'Jun 11, 2023 - Jul 10, 2023',
-      color: 'danger',
+]);
+
+/* -----------------------
+   CHART DATA
+------------------------*/
+
+const chartData = {
+  labels: ["Apr 1", "Apr 8", "Apr 15", "Apr 22", "Apr 30"],
+  datasets: [
+    {
+      data: [200, 850, 1200, 1500, 1000],
+      fill: true,
+      tension: 0.4,
     },
-    payment: { name: 'PayPal', icon: 'cib-cc-paypal' },
-    activity: 'Last month',
+  ],
+};
+
+const chartOptions = {
+  responsive: true,
+  plugins: {
+    legend: { display: false },
   },
-  {
-    avatar: { src: avatar5, status: 'success' },
-    user: {
-      name: 'Agapetus Tadeáš',
-      new: true,
-      registered: 'Jan 1, 2023',
-    },
-    country: { name: 'Spain', flag: 'cif-es' },
-    usage: {
-      value: 22,
-      period: 'Jun 11, 2023 - Jul 10, 2023',
-      color: 'primary',
-    },
-    payment: { name: 'Google Wallet', icon: 'cib-cc-apple-pay' },
-    activity: 'Last week',
-  },
-  {
-    avatar: { src: avatar6, status: 'danger' },
-    user: {
-      name: 'Friderik Dávid',
-      new: true,
-      registered: 'Jan 1, 2023',
-    },
-    country: { name: 'Poland', flag: 'cif-pl' },
-    usage: {
-      value: 43,
-      period: 'Jun 11, 2023 - Jul 10, 2023',
-      color: 'success',
-    },
-    payment: { name: 'Amex', icon: 'cib-cc-amex' },
-    activity: 'Last week',
-  },
-]
+};
 </script>
 
 <template>
-  <div>
-    <WidgetsStatsA class="mb-4" />
-    <CRow>
-      <CCol :md="12">
-        <CCard class="mb-4">
-          <CCardBody>
-            <CRow>
-              <CCol :sm="5">
-                <h4 id="traffic" class="card-title mb-0">Traffic</h4>
-                <div class="small text-body-secondary">January - July 2023</div>
-              </CCol>
-              <CCol :sm="7" class="d-none d-md-block">
-                <CButton color="primary" class="float-end">
-                  <CIcon icon="cil-cloud-download" />
-                </CButton>
-                <CButtonGroup
-                  class="float-end me-3"
-                  role="group"
-                  aria-label="Basic outlined example"
-                >
-                  <CButton color="secondary" variant="outline">Day</CButton>
-                  <CButton color="secondary" variant="outline" active>Month</CButton>
-                  <CButton color="secondary" variant="outline">Year</CButton>
-                </CButtonGroup>
-              </CCol>
-            </CRow>
-            <CRow>
-              <MainChart style="height: 300px; max-height: 300px; margin-top: 40px" />
-            </CRow>
-          </CCardBody>
-          <CCardFooter>
-            <CRow
-              :xs="{ cols: 1, gutter: 4 }"
-              :sm="{ cols: 2 }"
-              :lg="{ cols: 4 }"
-              :xl="{ cols: 5 }"
-              class="mb-2 text-center"
+  <div class="min-h-screen bg-gray-100 p-6">
+    <!-- Header -->
+    <div class="flex justify-between items-center mb-6">
+      <h1 class="text-2xl font-semibold">Dashboard</h1>
+
+      <div class="flex items-center gap-4">
+        <input
+          type="text"
+          placeholder="Search..."
+          class="border rounded-lg px-4 py-2"
+        />
+        <!-- <div class="flex items-center gap-2">
+          <img
+            src="https://i.pravatar.cc/40"
+            class="w-8 h-8 rounded-full"
+          />
+          <span>Admin</span>
+        </div> -->
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-4 mb-6">
+      <div
+        v-for="stat in stats"
+        :key="stat.title"
+        class="bg-white p-4 rounded-xl shadow"
+      >
+        <p class="text-gray-500 text-sm">{{ stat.title }}</p>
+        <p class="text-2xl font-bold">{{ stat.value }}</p>
+        <p v-if="stat.extra" class="text-green-600 text-sm">
+          {{ stat.extra }}
+        </p>
+      </div>
+    </div>
+
+    <!-- Orders Table -->
+    <div class="bg-white rounded-xl shadow mb-6">
+      <div class="p-4 border-b font-semibold">Orders</div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-left">
+          <thead class="bg-gray-50 text-gray-500 text-sm">
+            <tr>
+              <th class="p-3">Order ID</th>
+              <th>Client Email</th>
+              <th>Deadline</th>
+              <th>Word Count</th>
+              <th>Amount</th>
+              <th>Status</th>
+              <th>Payment</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr
+              v-for="order in orders"
+              :key="order.id"
+              class="border-t"
             >
-              <CCol>
-                <div class="text-body-secondary">Visits</div>
-                <div class="fw-semibold text-truncate">29.703 Users (40%)</div>
-                <CProgress class="mt-2" color="success" thin :precision="1" :value="40" />
-              </CCol>
-              <CCol>
-                <div class="text-body-secondary">Unique</div>
-                <div class="fw-semibold text-truncate">24.093 Users (20%)</div>
-                <CProgress class="mt-2" color="info" thin :precision="1" :value="20" />
-              </CCol>
-              <CCol>
-                <div class="text-body-secondary">Pageviews</div>
-                <div class="fw-semibold text-truncate">78.706 Views (60%)</div>
-                <CProgress class="mt-2" color="warning" thin :precision="1" :value="60" />
-              </CCol>
-              <CCol>
-                <div class="text-body-secondary">New Users</div>
-                <div class="fw-semibold text-truncate">22.123 Users (80%)</div>
-                <CProgress class="mt-2" color="danger" thin :precision="1" :value="80" />
-              </CCol>
-              <CCol class="d-none d-xl-block">
-                <div class="text-body-secondary">Bounce Rate</div>
-                <div class="fw-semibold text-truncate">Average Rate (40.15%)</div>
-                <CProgress class="mt-2" :value="40" thin :precision="1" />
-              </CCol>
-            </CRow>
-          </CCardFooter>
-        </CCard>
-      </CCol>
-    </CRow>
-    <WidgetsStatsD class="mb-4" />
-    <CRow>
-      <CCol :md="12">
-        <CCard class="mb-4">
-          <CCardHeader> Traffic &amp; Sales </CCardHeader>
-          <CCardBody>
-            <CRow>
-              <CCol :sm="12" :lg="6">
-                <CRow>
-                  <CCol :xs="6">
-                    <div class="border-start border-start-4 border-start-info py-1 px-3 mb-3">
-                      <div class="text-body-secondary small">New Clients</div>
-                      <div class="fs-5 fw-semibold">9,123</div>
-                    </div>
-                  </CCol>
-                  <CCol :xs="6">
-                    <div class="border-start border-start-4 border-start-danger py-1 px-3 mb-3">
-                      <div class="text-body-secondary small">Recurring Clients</div>
-                      <div class="fs-5 fw-semibold">22,643</div>
-                    </div>
-                  </CCol>
-                </CRow>
-                <hr class="mt-0" />
-                <div
-                  v-for="item in progressGroupExample1"
-                  :key="item.title"
-                  class="progress-group mb-4"
+              <td class="p-3 font-medium">{{ order.id }}</td>
+              <td>{{ order.email }}</td>
+              <td>{{ order.deadline }}</td>
+              <td>{{ order.words }}</td>
+              <td>{{ order.amount }}</td>
+
+              <td>
+                <span
+                  class="px-3 py-1 rounded-full text-sm"
+                  :class="{
+                    'bg-green-100 text-green-700':
+                      order.status === 'Completed',
+                    'bg-yellow-100 text-yellow-700':
+                      order.status === 'Pending',
+                    'bg-blue-100 text-blue-700':
+                      order.status === 'In Progress'
+                  }"
                 >
-                  <div class="progress-group-prepend">
-                    <span class="text-body-secondary small">{{ item.title }}</span>
-                  </div>
-                  <div class="progress-group-bars">
-                    <CProgress thin color="info" :value="item.value1" />
-                    <CProgress thin color="danger" :value="item.value2" />
-                  </div>
-                </div>
-              </CCol>
-              <CCol :sm="12" :lg="6">
-                <CRow>
-                  <CCol :xs="6">
-                    <div class="border-start border-start-4 border-start-warning py-1 px-3 mb-3">
-                      <div class="text-body-secondary small">Pageviews</div>
-                      <div class="fs-5 fw-semibold">78,623</div>
-                    </div>
-                  </CCol>
-                  <CCol :xs="6">
-                    <div class="border-start border-start-4 border-start-success py-1 px-3 mb-3">
-                      <div class="text-body-secondary small">Organic</div>
-                      <div class="fs-5 fw-semibold">49,123</div>
-                    </div>
-                  </CCol>
-                </CRow>
-                <hr class="mt-0" />
-                <div v-for="item in progressGroupExample2" :key="item.title" class="progress-group">
-                  <div class="progress-group-header">
-                    <CIcon :icon="item.icon" class="me-2" size="lg" />
-                    <span class="title">{{ item.title }}</span>
-                    <span class="ms-auto fw-semibold">{{ item.value }}%</span>
-                  </div>
-                  <div class="progress-group-bars">
-                    <CProgress thin :value="item.value" color="warning" />
-                  </div>
-                </div>
+                  {{ order.status }}
+                </span>
+              </td>
 
-                <div class="mb-5"></div>
+              <td>
+                <span
+                  class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm"
+                >
+                  {{ order.payment }}
+                </span>
+              </td>
 
-                <div v-for="item in progressGroupExample3" :key="item.title" class="progress-group">
-                  <div class="progress-group-header">
-                    <CIcon :icon="item.icon" class="me-2" size="lg" />
-                    <span class="title">{{ item.title }}</span>
-                    <span class="ms-auto fw-semibold">
-                      {{ item.value }}
-                      <span class="text-body-secondary small">({{ item.percent }}%)</span>
-                    </span>
-                  </div>
-                  <div class="progress-group-bars">
-                    <CProgress thin :value="item.percent" color="success" />
-                  </div>
-                </div>
-              </CCol>
-            </CRow>
-            <br />
-            <CTable align="middle" class="mb-0 border" hover responsive>
-              <CTableHead class="text-nowrap">
-                <CTableRow>
-                  <CTableHeaderCell class="bg-body-secondary text-center">
-                    <CIcon name="cil-people" />
-                  </CTableHeaderCell>
-                  <CTableHeaderCell class="bg-body-secondary"> User </CTableHeaderCell>
-                  <CTableHeaderCell class="bg-body-secondary text-center">
-                    Country
-                  </CTableHeaderCell>
-                  <CTableHeaderCell class="bg-body-secondary"> Usage </CTableHeaderCell>
-                  <CTableHeaderCell class="bg-body-secondary text-center">
-                    Payment Method
-                  </CTableHeaderCell>
-                  <CTableHeaderCell class="bg-body-secondary"> Activity </CTableHeaderCell>
-                </CTableRow>
-              </CTableHead>
-              <CTableBody>
-                <CTableRow v-for="item in tableExample" :key="item.name">
-                  <CTableDataCell class="text-center">
-                    <CAvatar size="md" :src="item.avatar.src" :status="item.avatar.status" />
-                  </CTableDataCell>
-                  <CTableDataCell>
-                    <div>{{ item.user.name }}</div>
-                    <div class="small text-body-secondary text-nowrap">
-                      <span>{{ item.user.new ? 'New' : 'Recurring' }}</span> |
-                      {{ item.user.registered }}
-                    </div>
-                  </CTableDataCell>
-                  <CTableDataCell class="text-center">
-                    <CIcon size="xl" :name="item.country.flag" :title="item.country.name" />
-                  </CTableDataCell>
-                  <CTableDataCell>
-                    <div class="d-flex justify-content-between align-items-baseline">
-                      <div class="fw-semibold">{{ item.usage.value }}%</div>
-                      <div class="text-nowrap text-body-secondary small ms-3">
-                        {{ item.usage.period }}
-                      </div>
-                    </div>
-                    <CProgress thin :color="item.usage.color" :value="item.usage.value" />
-                  </CTableDataCell>
-                  <CTableDataCell class="text-center">
-                    <CIcon size="xl" :name="item.payment.icon" />
-                  </CTableDataCell>
-                  <CTableDataCell>
-                    <div class="small text-body-secondary">Last login</div>
-                    <div class="fw-semibold text-nowrap">
-                      {{ item.activity }}
-                    </div>
-                  </CTableDataCell>
-                </CTableRow>
-              </CTableBody>
-            </CTable>
-          </CCardBody>
-        </CCard>
-      </CCol>
-    </CRow>
+              <td>
+                <button
+                  class="bg-gray-100 px-3 py-1 rounded-lg hover:bg-gray-200"
+                >
+                  View
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Revenue Chart -->
+    <div class="bg-white p-6 rounded-xl shadow">
+      <h3 class="font-semibold mb-4">Revenue Trend (Last 30 Days)</h3>
+      <Line :data="chartData" :options="chartOptions" />
+    </div>
   </div>
 </template>
