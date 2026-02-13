@@ -38,10 +38,10 @@ onMounted(() => {
         </CNavItem>
       </CHeaderNav>
       <CHeaderNav>
-        <li class="nav-item py-1">
+        <!-- <li class="nav-item py-1">
           <div class="vr h-100 mx-2 text-body text-opacity-75"></div>
-        </li>
-        <CDropdown variant="nav-item" placement="bottom-end">
+        </li> -->
+        <!-- <CDropdown variant="nav-item" placement="bottom-end">
           <CDropdownToggle :caret="false">
             <CIcon v-if="colorMode === 'dark'" icon="cil-moon" size="lg" />
             <CIcon v-else-if="colorMode === 'light'" icon="cil-sun" size="lg" />
@@ -76,10 +76,10 @@ onMounted(() => {
               <CIcon class="me-2" icon="cil-contrast" size="lg" /> Auto
             </CDropdownItem>
           </CDropdownMenu>
-        </CDropdown>
-        <li class="nav-item py-1">
+        </CDropdown> -->
+        <!-- <li class="nav-item py-1">
           <div class="vr h-100 mx-2 text-body text-opacity-75"></div>
-        </li>
+        </li> -->
         <AppHeaderDropdownAccnt />
       </CHeaderNav>
     </CContainer>
