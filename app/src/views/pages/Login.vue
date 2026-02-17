@@ -4,18 +4,26 @@
       <CRow class="justify-content-center">
         <CCol :md="8">
           <CCardGroup>
-            <CCard class="text-white py-5">
+            <!-- <CCard class="text-white py-5">
               <CCardBody class="text-center">
                 <div>
                   <img
                     src="@/assets/brand/InkWell-Writers-Logo.png"
                     alt="InkWell Writers Logo"
+                    width="180"
                   />
                 </div>
               </CCardBody>
-            </CCard>
-            <CCard class="p-4">
+            </CCard> -->
+            <CCard class="p-4 max-w-md mx-auto">
               <CCardBody>
+                <div class="py-3">
+                  <img
+                    src="@/assets/brand/InkWell-Writers-Logo.png"
+                    alt="InkWell Writers Logo"
+                    width="180"
+                  />
+                </div>
                 <CForm>
                   <h1>Login</h1>
                   <p class="text-body-secondary">Sign In to your account</p>
@@ -57,3 +65,55 @@
     </CContainer>
   </div>
 </template>
+
+<script setup>
+import { computed, onMounted, reactive, ref } from "vue";
+import useVuelidate from "@vuelidate/core";
+import { required, email, minLength } from "@vuelidate/validators";
+import { useAuthStore } from "../../stores/auth.store";
+
+onMounted(() => {
+  auth.error = null;
+});
+
+/**Form variables */
+const formData = reactive({
+  email: "",
+  password: "",
+});
+
+/**initialise the auth store */
+const auth = useAuthStore();
+
+/**Get error from auth store */
+const error = computed(() => {
+  return auth.error;
+});
+
+const validations = computed(() => {
+  return {
+    email: { required, email },
+    password: { required, minLength: minLength(3) },
+  };
+});
+
+/**initialise form validation */
+const v$ = useVuelidate(validations, formData);
+
+/**Close Login Modal */
+const closeModal = () => {
+  auth.isLoginModalOpen = false;
+};
+
+/**Submit form */
+const handleSubmit = async () => {
+  const result = await v$.value.$validate();
+  console.log(formData);
+  if (result) {
+    console.log("Form submitted");
+    return auth.login(formData);
+  } else {
+    console.log("Form not submitted");
+  }
+};
+</script>
