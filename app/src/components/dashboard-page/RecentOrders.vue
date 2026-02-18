@@ -1,4 +1,6 @@
-<!-- components/dashboard/RecentOrders.vue -->
+components/dashboard/RecentOrders.vue
+
+
 <script setup>
 import { ref } from "vue";
 
