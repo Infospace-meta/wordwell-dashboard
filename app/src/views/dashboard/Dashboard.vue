@@ -1,61 +1,80 @@
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
+import api from "@/services/api"; // Ensure baseURL: http://localhost:4000
+
 import DashboardHeader from "../../components/dashboard-page/DashboardHeader.vue";
 import StatsCards from "../../components/dashboard-page/StatsCards.vue";
 import RecentOrders from "../../components/dashboard-page/RecentOrders.vue";
 import RevenueChart from "../../components/dashboard-page/RevenueChart.vue";
 
-const stats = ref([
-  {
-    title: "Total Orders",
-    value: "1,220",
-    change: "+12%",
-    icon: "shopping-bag",
-  },
-  { title: "Paid Orders", value: "845", change: "+8%", icon: "credit-card" },
-  { title: "In Progress", value: "32", change: "-2%", icon: "clock" },
-  { title: "Completed", value: "610", change: "+15%", icon: "check-circle" },
-  { title: "Revenue", value: "$12,540", change: "+15%", icon: "trending-up" },
-]);
+/* -----------------------
+   STATE
+----------------------- */
+const orders = ref([]);
+const stats = ref([]);
+const loading = ref(false);
+const error = ref(null);
 
-const orders = ref([
-  {
-    id: "#10234",
-    email: "john.doe@example.com",
-    deadline: "Apr 25, 2026",
-    words: 1500,
-    amount: "$120.00",
-    status: "In Progress",
-    payment: "Paid",
-  },
-  {
-    id: "#10212",
-    email: "sarah.smith@example.com",
-    deadline: "Apr 24, 2026",
-    words: 2000,
-    amount: "$180.00",
-    status: "Completed",
-    payment: "Paid",
-  },
-  {
-    id: "#10198",
-    email: "mike.jones@example.com",
-    deadline: "Apr 23, 2026",
-    words: 750,
-    amount: "$75.00",
-    status: "Pending",
-    payment: "Pending",
-  },
-  {
-    id: "#10185",
-    email: "emma.wilson@example.com",
-    deadline: "Apr 22, 2026",
-    words: 3200,
-    amount: "$290.00",
-    status: "In Progress",
-    payment: "Paid",
-  },
-]);
+/* -----------------------
+   HELPERS
+----------------------- */
+const formatStatus = (status) => {
+  return status
+    .toLowerCase()
+    .replace("_", " ")
+    .replace(/\b\w/g, l => l.toUpperCase());
+};
+
+/* -----------------------
+   FETCH ORDERS AND CALCULATE STATS
+----------------------- */
+const fetchOrders = async () => {
+  try {
+    loading.value = true;
+
+    const res = await api.get("/orders");
+
+    // Replace this if your API wraps orders inside a field
+    const backendOrders = Array.isArray(res.data) ? res.data : res.data.orders;
+
+    // Map orders for table display
+    orders.value = backendOrders.map(order => ({
+      id: `#${order.order_number}`,
+      email: order.user?.email ?? "N/A",
+      deadline: new Date(order.deadline).toLocaleDateString(),
+      words: order.pages * 275, // approximate words per page
+      amount: `$${order.total_price}`,
+      status: formatStatus(order.status),
+      payment: order.status === "PAID" ? "Paid" : "Pending",
+    }));
+
+    // Calculate stats dynamically
+    const totalOrders = backendOrders.length;
+    const paidOrders = backendOrders.filter(o => o.status === "PAID").length;
+    const inProgressOrders = backendOrders.filter(o => o.status === "IN_PROGRESS").length;
+    const completedOrders = backendOrders.filter(o => o.status === "COMPLETED").length;
+    const totalRevenue = backendOrders.reduce(
+      (sum, o) => sum + Number(o.total_price || 0),
+      0
+    );
+
+    stats.value = [
+      { title: "Total Orders", value: totalOrders, change: "", icon: "shopping-bag" },
+      { title: "Paid Orders", value: paidOrders, change: "", icon: "credit-card" },
+      { title: "In Progress", value: inProgressOrders, change: "", icon: "clock" },
+      { title: "Completed", value: completedOrders, change: "", icon: "check-circle" },
+      { title: "Revenue", value: `$${totalRevenue.toLocaleString()}`, change: "", icon: "trending-up" },
+    ];
+
+  } catch (err) {
+    console.error(err);
+    error.value = "Failed to load dashboard data";
+  } finally {
+    loading.value = false;
+  }
+};
+
+onMounted(fetchOrders);
 </script>
 
 <template>
@@ -74,13 +93,13 @@ const orders = ref([
       </div>
 
       <!-- Stats Grid -->
-      <StatsCards :stats="stats" />
+      <StatsCards :stats="stats || []" />
 
       <!-- Charts & Tables Grid -->
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-8">
         <!-- Recent Orders Table (spans 2 columns) -->
         <div class="lg:col-span-2">
-          <RecentOrders :orders="orders" />
+          <RecentOrders :orders="orders || []" />
         </div>
 
         <!-- Revenue Chart -->
@@ -100,6 +119,7 @@ const orders = ref([
             >
           </div>
           <div class="space-y-4">
+            <!-- Placeholder static writers; can be updated from backend later -->
             <div class="flex items-center justify-between">
               <div class="flex items-center gap-3">
                 <div
@@ -135,22 +155,12 @@ const orders = ref([
           <h3 class="font-semibold text-slate-700 mb-4">Pending Reviews</h3>
           <div class="space-y-3">
             <div class="flex items-center justify-between">
-              <span class="text-sm text-slate-600"
-                >#10234 - Academic Essay</span
-              >
-              <span
-                class="text-xs bg-amber-100 text-amber-700 px-2 py-1 rounded-full"
-                >2h left</span
-              >
+              <span class="text-sm text-slate-600">#10234 - Academic Essay</span>
+              <span class="text-xs bg-amber-100 text-amber-700 px-2 py-1 rounded-full">2h left</span>
             </div>
             <div class="flex items-center justify-between">
-              <span class="text-sm text-slate-600"
-                >#10212 - Research Paper</span
-              >
-              <span
-                class="text-xs bg-amber-100 text-amber-700 px-2 py-1 rounded-full"
-                >4h left</span
-              >
+              <span class="text-sm text-slate-600">#10212 - Research Paper</span>
+              <span class="text-xs bg-amber-100 text-amber-700 px-2 py-1 rounded-full">4h left</span>
             </div>
           </div>
         </div>
