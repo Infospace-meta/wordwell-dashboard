@@ -5,8 +5,6 @@
         <h3 class="font-semibold text-slate-800">Revenue Trend</h3>
         <p class="text-xs text-slate-500 mt-1">Last 30 days performance</p>
       </div>
-
-      <!-- Time Range Selector -->
       <div class="flex bg-slate-100 rounded-lg p-1">
         <button
           @click="timeRange = 'daily'"
@@ -44,12 +42,10 @@
       </div>
     </div>
 
-    <!-- Chart Container -->
     <div class="h-64">
       <Line :data="chartData" :options="chartOptions" />
     </div>
 
-    <!-- Stats Summary -->
     <div class="grid grid-cols-3 gap-4 mt-6 pt-6 border-t border-slate-100">
       <div>
         <p class="text-xs text-slate-500">Total Revenue</p>

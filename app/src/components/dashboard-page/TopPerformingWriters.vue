@@ -1,9 +1,7 @@
-<!-- src/components/dashboard-page/TopPerformingWriters.vue -->
 <template>
   <div class="bg-white rounded-xl shadow-sm p-6">
     <h2 class="text-lg font-semibold mb-4">Top Performing Writers</h2>
     <div class="space-y-4">
-      <!-- Placeholder data -->
       <div v-for="n in 3" :key="n" class="flex items-center justify-between">
         <div class="flex items-center">
           <div class="w-8 h-8 bg-gray-300 rounded-full"></div>
@@ -19,5 +17,4 @@
 </template>
 
 <script setup>
-// Fetch real data if needed
 </script>

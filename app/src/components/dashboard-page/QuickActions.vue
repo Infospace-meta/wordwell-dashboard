@@ -1,4 +1,3 @@
-<!-- src/components/dashboard-page/QuickActions.vue -->
 <template>
   <div class="bg-white rounded-xl shadow-sm p-6">
     <h2 class="text-lg font-semibold mb-4">Quick Actions</h2>
@@ -15,7 +14,6 @@
       >
         Add New Writer
       </button>
-      <!-- Add more actions if needed -->
     </div>
   </div>
 </template>

@@ -1,4 +1,3 @@
-<!-- src/components/dashboard-page/StatsCards.vue -->
 <template>
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
     <div 

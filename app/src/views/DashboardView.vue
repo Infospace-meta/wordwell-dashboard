@@ -1,8 +1,8 @@
-<!-- src/views/Dashboard.vue -->
+<!-- src/views/Dashboard.vue (or wherever this component lives) -->
 <template>
   <div class="min-h-screen bg-slate-50">
     <main class="p-6 lg:p-8 max-w-7xl mx-auto">
-      <!-- Welcome -->
+      <!-- Header -->
       <div class="mb-8">
         <h1 class="text-3xl font-bold text-slate-800">
           Welcome back, Admin 👋
@@ -12,10 +12,10 @@
         </p>
       </div>
 
-      <!-- Stats -->
+      <!-- Stats cards -->
       <StatsCards :stats="stats" />
 
-      <!-- Main content: Orders table + Detail panel -->
+      <!-- Main content: Recent Orders + Order Detail -->
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-8">
         <div class="lg:col-span-2">
           <RecentOrders 
@@ -29,6 +29,10 @@
             v-if="selectedOrder"
             :order="selectedOrder"
             @close="selectedOrder = null"
+            @update-order="handleUpdateOrder"
+            @update-payment-status="handleUpdatePaymentStatus"
+            @delete-order="handleDeleteOrder"
+            @suspend-order="handleSuspendOrder"
           />
           <div 
             v-else 
@@ -42,14 +46,21 @@
         </div>
       </div>
 
-      <!-- Bottom cards -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
-        <TopPerformingWriters />
-        <PendingReviews />
-        <QuickActions 
-          @new-order="handleNewOrder"
-          @add-writer="handleAddWriter"
-        />
+      <!-- Bottom cards – adapt layout when detail is open -->
+      <div class="mt-6">
+        <div 
+          class="grid gap-6"
+          :class="selectedOrder 
+            ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3' 
+            : 'grid-cols-1 md:grid-cols-3'"
+        >
+          <TopPerformingWriters />
+          <PendingReviews />
+          <QuickActions 
+            @new-order="handleNewOrder"
+            @add-writer="handleAddWriter"
+          />
+        </div>
       </div>
     </main>
   </div>
@@ -59,6 +70,7 @@
 import { ref, onMounted } from 'vue'
 import api from '@/services/api'
 
+// Components
 import StatsCards        from '@/components/dashboard-page/StatsCards.vue'
 import RecentOrders      from '@/components/dashboard-page/RecentOrders.vue'
 import OrderDetail       from '@/components/dashboard-page/OrderDetail.vue'
@@ -73,23 +85,23 @@ const selectedOrder = ref(null)
 const fetchOrders = async () => {
   try {
     const res = await api.get('/orders')
-    const data = Array.isArray(res.data) ? res.data : res.data.orders || []
+    const data = Array.isArray(res.data) ? res.data : (res.data?.orders || [])
 
     orders.value = data.map(order => ({
-      id: order.id,                           // ← UUID for fetching detail
+      id: order.id,
       displayId: `#${order.order_number}`,
       email: order.user?.email ?? 'N/A',
       words: order.pages * 275,
-      amount: `$${Number(order.total_price).toFixed(2)}`,
+      amount: `$${Number(order.total_price || 0).toFixed(2)}`,
       payment: order.status === 'PAID' ? 'Paid' : 'Pending'
     }))
 
-    // Stats
-    const totalOrders   = data.length
-    const paid          = data.filter(o => o.status === 'PAID').length
-    const inProgress    = data.filter(o => o.status === 'IN_PROGRESS').length
-    const completed     = data.filter(o => o.status === 'COMPLETED').length
-    const revenue       = data.reduce((sum, o) => sum + Number(o.total_price || 0), 0)
+    // Calculate stats
+    const totalOrders = data.length
+    const paid = data.filter(o => o.status === 'PAID').length
+    const inProgress = data.filter(o => o.status === 'IN_PROGRESS').length
+    const completed = data.filter(o => o.status === 'COMPLETED').length
+    const revenue = data.reduce((sum, o) => sum + Number(o.total_price || 0), 0)
 
     stats.value = [
       { title: 'Total Orders',  value: totalOrders,   icon: 'shopping-bag' },
@@ -99,19 +111,71 @@ const fetchOrders = async () => {
       { title: 'Revenue',       value: `$${revenue.toLocaleString()}`, icon: 'trending-up' }
     ]
   } catch (err) {
-    console.error('Failed to load orders list:', err)
+    console.error('Failed to load orders:', err)
   }
 }
 
 const handleOrderSelect = async (uuid) => {
   if (!uuid) return
-
   try {
     const res = await api.get(`/orders/${uuid}`)
     selectedOrder.value = res.data
   } catch (err) {
     console.error(`Failed to load order ${uuid}:`, err)
-    // You can add toast/notification here
+  }
+}
+
+// ── Order actions handlers ───────────────────────────────────────
+const handleUpdateOrder = async ({ orderId, updates }) => {
+  try {
+    const res = await api.patch(`/orders/${orderId}`, updates)
+    if (selectedOrder.value?.id === orderId) {
+      Object.assign(selectedOrder.value, res.data || updates)
+    }
+    // Optional: refresh full list
+    // await fetchOrders()
+  } catch (err) {
+    console.error('Failed to update order:', err)
+    alert('Could not save changes')
+  }
+}
+
+const handleUpdatePaymentStatus = async ({ orderId, newStatus }) => {
+  try {
+    await api.patch(`/orders/${orderId}`, { status: newStatus })
+    if (selectedOrder.value?.id === orderId) {
+      selectedOrder.value.status = newStatus
+    }
+  } catch (err) {
+    console.error('Failed to update payment status:', err)
+    alert('Could not update payment status')
+  }
+}
+
+const handleDeleteOrder = async (orderId) => {
+  if (!confirm('Delete this order permanently?')) return
+  try {
+    await api.delete(`/orders/${orderId}`)
+    orders.value = orders.value.filter(o => o.id !== orderId)
+    if (selectedOrder.value?.id === orderId) {
+      selectedOrder.value = null
+    }
+  } catch (err) {
+    console.error('Delete failed:', err)
+    alert('Failed to delete order')
+  }
+}
+
+const handleSuspendOrder = async (orderId) => {
+  if (!confirm('Suspend this order?')) return
+  try {
+    await api.patch(`/orders/${orderId}`, { status: 'SUSPENDED' }) // adjust status value
+    if (selectedOrder.value?.id === orderId) {
+      selectedOrder.value.status = 'SUSPENDED'
+    }
+  } catch (err) {
+    console.error('Suspend failed:', err)
+    alert('Failed to suspend order')
   }
 }
 
