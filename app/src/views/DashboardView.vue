@@ -1,4 +1,3 @@
-<!-- src/views/Dashboard.vue (or wherever this component lives) -->
 <template>
   <div class="min-h-screen bg-slate-50">
     <main class="p-6 lg:p-8 max-w-7xl mx-auto">

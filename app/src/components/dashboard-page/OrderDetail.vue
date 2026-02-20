@@ -1,4 +1,3 @@
-<!-- src/components/dashboard-page/OrderDetail.vue -->
 <template>
   <div class="bg-white rounded-xl shadow-sm border border-gray-200 h-full flex flex-col overflow-hidden">
     <!-- Header – smaller & cleaner -->
