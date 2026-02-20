@@ -1,11 +1,3 @@
-<!-- components/dashboard/DashboardHeader.vue -->
-<script setup>
-import { ref } from "vue";
-
-const search = ref("");
-const showNotifications = ref(false);
-</script>
-
 <template>
   <header class="bg-white border-b border-slate-200 sticky top-0 z-50">
     <div class="max-w-7xl mx-auto px-6 lg:px-8">
@@ -142,3 +134,11 @@ const showNotifications = ref(false);
     </div>
   </header>
 </template>
+
+<!-- components/dashboard/DashboardHeader.vue -->
+<script setup>
+import { ref } from "vue";
+
+const search = ref("");
+const showNotifications = ref(false);
+</script>

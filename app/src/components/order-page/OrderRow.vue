@@ -1,15 +1,3 @@
-<!-- components/OrderRow.vue -->
-<script setup>
-import OrderBadge from "./OrderBadge.vue";
-
-defineProps({
-  order: {
-    type: Object,
-    required: true,
-  },
-});
-</script>
-
 <template>
   <tr
     class="group hover:bg-linear-to-r hover:from-slate-50/50 hover:to-white transition-all duration-300"
@@ -142,3 +130,13 @@ defineProps({
     </td>
   </tr>
 </template>
+<script setup>
+import OrderBadge from "./OrderBadge.vue";
+
+defineProps({
+  order: {
+    type: Object,
+    required: true,
+  },
+});
+</script>

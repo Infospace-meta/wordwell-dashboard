@@ -1,30 +1,3 @@
-components/dashboard/RecentOrders.vue
-
-
-<script setup>
-import { ref } from "vue";
-
-defineProps({
-  orders: {
-    type: Array,
-    required: true,
-  },
-});
-
-const statusColors = {
-  Completed: "bg-emerald-50 text-emerald-700 ring-1 ring-emerald-600/20",
-  "In Progress": "bg-blue-50 text-blue-700 ring-1 ring-blue-600/20",
-  Pending: "bg-amber-50 text-amber-700 ring-1 ring-amber-600/20",
-  Failed: "bg-rose-50 text-rose-700 ring-1 ring-rose-600/20",
-};
-
-const paymentColors = {
-  Paid: "bg-emerald-50 text-emerald-700 ring-1 ring-emerald-600/20",
-  Pending: "bg-amber-50 text-amber-700 ring-1 ring-amber-600/20",
-  Failed: "bg-rose-50 text-rose-700 ring-1 ring-rose-600/20",
-};
-</script>
-
 <template>
   <div
     class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden"
@@ -139,3 +112,26 @@ const paymentColors = {
     </div>
   </div>
 </template>
+<script setup>
+import { ref } from "vue";
+
+defineProps({
+  orders: {
+    type: Array,
+    required: true,
+  },
+});
+
+const statusColors = {
+  Completed: "bg-emerald-50 text-emerald-700 ring-1 ring-emerald-600/20",
+  "In Progress": "bg-blue-50 text-blue-700 ring-1 ring-blue-600/20",
+  Pending: "bg-amber-50 text-amber-700 ring-1 ring-amber-600/20",
+  Failed: "bg-rose-50 text-rose-700 ring-1 ring-rose-600/20",
+};
+
+const paymentColors = {
+  Paid: "bg-emerald-50 text-emerald-700 ring-1 ring-emerald-600/20",
+  Pending: "bg-amber-50 text-amber-700 ring-1 ring-amber-600/20",
+  Failed: "bg-rose-50 text-rose-700 ring-1 ring-rose-600/20",
+};
+</script>

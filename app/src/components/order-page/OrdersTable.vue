@@ -1,33 +1,3 @@
-<script setup>
-import { computed } from "vue";
-import OrderRow from "./OrderRow.vue";
-import EmptyState from "./EmptyState.vue";
-
-const props = defineProps({
-  orders: {
-    type: Array,
-    required: true,
-  },
-  search: String,
-  activeFilter: String,
-});
-
-const filteredOrders = computed(() =>
-  props.orders.filter((order) => {
-    const matchesFilter =
-      props.activeFilter === "All" ||
-      order.status === props.activeFilter ||
-      order.payment === props.activeFilter;
-
-    const matchesSearch =
-      order.id.toLowerCase().includes(props.search.toLowerCase()) ||
-      order.email.toLowerCase().includes(props.search.toLowerCase());
-
-    return matchesFilter && matchesSearch;
-  }),
-);
-</script>
-
 <template>
   <div
     class="bg-white rounded-3xl border-2 border-slate-200 shadow-xl overflow-hidden"
@@ -96,3 +66,33 @@ const filteredOrders = computed(() =>
     </div>
   </div>
 </template>
+
+<script setup>
+import { computed } from "vue";
+import OrderRow from "./OrderRow.vue";
+import EmptyState from "./EmptyState.vue";
+
+const props = defineProps({
+  orders: {
+    type: Array,
+    required: true,
+  },
+  search: String,
+  activeFilter: String,
+});
+
+const filteredOrders = computed(() =>
+  props.orders.filter((order) => {
+    const matchesFilter =
+      props.activeFilter === "All" ||
+      order.status === props.activeFilter ||
+      order.payment === props.activeFilter;
+
+    const matchesSearch =
+      order.id.toLowerCase().includes(props.search.toLowerCase()) ||
+      order.email.toLowerCase().includes(props.search.toLowerCase());
+
+    return matchesFilter && matchesSearch;
+  }),
+);
+</script>

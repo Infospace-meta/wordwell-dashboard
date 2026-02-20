@@ -1,3 +1,12 @@
+<template>
+  <span
+    class="inline-flex items-center px-4 py-1.5 rounded-full text-xs font-semibold"
+    :class="badgeClass(type)"
+  >
+    {{ type }}
+  </span>
+</template>
+
 <script setup>
 defineProps({
   type: {
@@ -18,12 +27,3 @@ const badgeClass = (type) => {
   return map[type] || "bg-slate-50 text-slate-700 ring-1 ring-slate-600/20";
 };
 </script>
-
-<template>
-  <span
-    class="inline-flex items-center px-4 py-1.5 rounded-full text-xs font-semibold"
-    :class="badgeClass(type)"
-  >
-    {{ type }}
-  </span>
-</template>

@@ -1,19 +1,3 @@
-<script setup>
-defineProps({
-  activeFilter: String,
-  filters: {
-    type: Array,
-    required: true,
-  },
-});
-
-const emit = defineEmits(["update:activeFilter"]);
-
-const setFilter = (filter) => {
-  emit("update:activeFilter", filter);
-};
-</script>
-
 <template>
   <div class="flex flex-wrap gap-3">
     <button
@@ -40,3 +24,19 @@ const setFilter = (filter) => {
     </button>
   </div>
 </template>
+
+<script setup>
+defineProps({
+  activeFilter: String,
+  filters: {
+    type: Array,
+    required: true,
+  },
+});
+
+const emit = defineEmits(["update:activeFilter"]);
+
+const setFilter = (filter) => {
+  emit("update:activeFilter", filter);
+};
+</script>
