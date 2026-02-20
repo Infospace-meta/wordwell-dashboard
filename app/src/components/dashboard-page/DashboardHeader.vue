@@ -1,5 +1,5 @@
 <template>
-  <header class="bg-white border-b border-slate-200 sticky top-0 z-50">
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-[9999]">
     <div class="max-w-7xl mx-auto px-6 lg:px-8">
       <div class="flex items-center justify-between h-16">
         <!-- Logo and Brand -->
@@ -135,7 +135,6 @@
   </header>
 </template>
 
-<!-- components/dashboard/DashboardHeader.vue -->
 <script setup>
 import { ref } from "vue";
 
