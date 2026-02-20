@@ -1,9 +1,8 @@
+<!-- src/views/Dashboard.vue -->
 <template>
   <div class="min-h-screen bg-slate-50">
-    <!-- <DashboardHeader /> -->
-
     <main class="p-6 lg:p-8 max-w-7xl mx-auto">
-      <!-- Welcome Section -->
+      <!-- Welcome -->
       <div class="mb-8">
         <h1 class="text-3xl font-bold text-slate-800">
           Welcome back, Admin 👋
@@ -13,20 +12,37 @@
         </p>
       </div>
 
-      <!-- Stats Grid -->
+      <!-- Stats -->
       <StatsCards :stats="stats" />
 
-      <!-- Charts & Tables -->
+      <!-- Main content: Orders table + Detail panel -->
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-8">
         <div class="lg:col-span-2">
-          <RecentOrders :orders="orders" />
+          <RecentOrders 
+            :orders="orders" 
+            @select-order="handleOrderSelect"
+          />
         </div>
+
         <div class="lg:col-span-1">
-          <RevenueChart />
+          <OrderDetail 
+            v-if="selectedOrder"
+            :order="selectedOrder"
+            @close="selectedOrder = null"
+          />
+          <div 
+            v-else 
+            class="bg-white rounded-xl shadow-sm p-6 h-full flex items-center justify-center text-center text-gray-500"
+          >
+            <div>
+              <p class="text-lg font-medium mb-2">Select an order to view details</p>
+              <p class="text-sm">Click any row in the recent orders table</p>
+            </div>
+          </div>
         </div>
       </div>
 
-      <!-- Bottom row - three cards -->
+      <!-- Bottom cards -->
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
         <TopPerformingWriters />
         <PendingReviews />
@@ -40,74 +56,67 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import api from '@/services/api';
+import { ref, onMounted } from 'vue'
+import api from '@/services/api'
 
-import StatsCards from '@/components/dashboard-page/StatsCards.vue';
-import RecentOrders from '@/components/dashboard-page/RecentOrders.vue';
-import RevenueChart from '@/components/dashboard-page/RevenueChart.vue';
-import TopPerformingWriters from '@/components/dashboard-page/TopPerformingWriters.vue';
-import PendingReviews from '@/components/dashboard-page/PendingReviews.vue';
-import QuickActions from '@/components/dashboard-page/QuickActions.vue';
+import StatsCards        from '@/components/dashboard-page/StatsCards.vue'
+import RecentOrders      from '@/components/dashboard-page/RecentOrders.vue'
+import OrderDetail       from '@/components/dashboard-page/OrderDetail.vue'
+import TopPerformingWriters from '@/components/dashboard-page/TopPerformingWriters.vue'
+import PendingReviews    from '@/components/dashboard-page/PendingReviews.vue'
+import QuickActions      from '@/components/dashboard-page/QuickActions.vue'
 
-const orders = ref([]);
-const stats = ref([]);
-const loading = ref(false);
+const orders = ref([])
+const stats = ref([])
+const selectedOrder = ref(null)
 
 const fetchOrders = async () => {
   try {
-    loading.value = true;
-    const res = await api.get("/orders");
-    const backendOrders = Array.isArray(res.data) ? res.data : res.data.orders || [];
+    const res = await api.get('/orders')
+    const data = Array.isArray(res.data) ? res.data : res.data.orders || []
 
-    // Format for RecentOrders table
-    orders.value = backendOrders.map(order => ({
-      id: `#${order.order_number}`,
-      email: order.user?.email ?? "N/A",
-      deadline: new Date(order.deadline).toLocaleDateString(),
+    orders.value = data.map(order => ({
+      id: order.id,                           // ← UUID for fetching detail
+      displayId: `#${order.order_number}`,
+      email: order.user?.email ?? 'N/A',
       words: order.pages * 275,
-      amount: `$${order.total_price}`,
-      status: formatStatus(order.status),
-      payment: order.status === "PAID" ? "Paid" : "Pending",
-    }));
+      amount: `$${Number(order.total_price).toFixed(2)}`,
+      payment: order.status === 'PAID' ? 'Paid' : 'Pending'
+    }))
 
-    // Calculate stats
-    const totalOrders = backendOrders.length;
-    const paidOrders = backendOrders.filter(o => o.status === "PAID").length;
-    const inProgress = backendOrders.filter(o => o.status === "IN_PROGRESS").length;
-    const completed = backendOrders.filter(o => o.status === "COMPLETED").length;
-    const totalRevenue = backendOrders.reduce((sum, o) => sum + Number(o.total_price || 0), 0);
+    // Stats
+    const totalOrders   = data.length
+    const paid          = data.filter(o => o.status === 'PAID').length
+    const inProgress    = data.filter(o => o.status === 'IN_PROGRESS').length
+    const completed     = data.filter(o => o.status === 'COMPLETED').length
+    const revenue       = data.reduce((sum, o) => sum + Number(o.total_price || 0), 0)
 
     stats.value = [
-      { title: "Total Orders", value: totalOrders, icon: "shopping-bag" },
-      { title: "Paid Orders",   value: paidOrders,   icon: "credit-card" },
-      { title: "In Progress",   value: inProgress,   icon: "clock" },
-      { title: "Completed",     value: completed,    icon: "check-circle" },
-      { title: "Revenue",       value: `$${totalRevenue.toLocaleString()}`, icon: "trending-up" },
-    ];
+      { title: 'Total Orders',  value: totalOrders,   icon: 'shopping-bag' },
+      { title: 'Paid Orders',   value: paid,          icon: 'credit-card' },
+      { title: 'In Progress',   value: inProgress,    icon: 'clock' },
+      { title: 'Completed',     value: completed,     icon: 'check-circle' },
+      { title: 'Revenue',       value: `$${revenue.toLocaleString()}`, icon: 'trending-up' }
+    ]
   } catch (err) {
-    console.error("Dashboard load error:", err);
-  } finally {
-    loading.value = false;
+    console.error('Failed to load orders list:', err)
   }
-};
+}
 
-const formatStatus = (status) => {
-  return status
-    .toLowerCase()
-    .replace(/_/g, " ")
-    .replace(/\b\w/g, l => l.toUpperCase());
-};
+const handleOrderSelect = async (uuid) => {
+  if (!uuid) return
 
-const handleNewOrder = () => {
-  console.log("New order clicked");
-  // router.push('/orders/new') or modal, etc.
-};
+  try {
+    const res = await api.get(`/orders/${uuid}`)
+    selectedOrder.value = res.data
+  } catch (err) {
+    console.error(`Failed to load order ${uuid}:`, err)
+    // You can add toast/notification here
+  }
+}
 
-const handleAddWriter = () => {
-  console.log("Add writer clicked");
-  // router.push('/writers/new') or modal
-};
+const handleNewOrder  = () => console.log('Create new order clicked')
+const handleAddWriter = () => console.log('Add writer clicked')
 
-onMounted(fetchOrders);
+onMounted(fetchOrders)
 </script>

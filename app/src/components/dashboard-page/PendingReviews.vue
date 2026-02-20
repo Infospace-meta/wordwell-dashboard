@@ -1,26 +1,18 @@
+<!-- src/components/dashboard-page/PendingReviews.vue -->
 <template>
-  <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm h-full">
-    <h3 class="font-semibold text-slate-700 mb-4">Pending Reviews</h3>
-    
-    <div class="space-y-3">
-      <div v-for="review in pendingReviews" :key="review.id" class="flex items-center justify-between">
-        <span class="text-sm text-slate-600">{{ review.title }}</span>
-        <span class="text-xs bg-amber-100 text-amber-700 px-2 py-1 rounded-full">
-          {{ review.timeLeft }}
-        </span>
+  <div class="bg-white rounded-xl shadow-sm p-6">
+    <h2 class="text-lg font-semibold mb-4">Pending Reviews</h2>
+    <div class="space-y-4">
+      <!-- Placeholder -->
+      <div v-for="n in 2" :key="n" class="border-b pb-2">
+        <p class="font-medium text-gray-900">Order #{{ 100 + n }}</p>
+        <p class="text-sm text-gray-500">Awaiting review from client</p>
       </div>
     </div>
+    <p v-if="false" class="text-center text-gray-500">No pending reviews</p>
   </div>
 </template>
 
 <script setup>
-defineProps({
-  pendingReviews: {
-    type: Array,
-    default: () => [
-      { id: "10234", title: "#10234 - Academic Essay", timeLeft: "2h left" },
-      { id: "10212", title: "#10212 - Research Paper", timeLeft: "4h left" },
-    ]
-  }
-});
+// Fetch real data if needed
 </script>
