@@ -1,3 +1,71 @@
+<template>
+  <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+    <div class="flex items-center justify-between mb-6">
+      <div>
+        <h3 class="font-semibold text-slate-800">Revenue Trend</h3>
+        <p class="text-xs text-slate-500 mt-1">Last 30 days performance</p>
+      </div>
+      <div class="flex bg-slate-100 rounded-lg p-1">
+        <button
+          @click="timeRange = 'daily'"
+          class="px-3 py-1 text-xs font-medium rounded-md transition-colors"
+          :class="
+            timeRange === 'daily'
+              ? 'bg-white text-blue-600 shadow-sm'
+              : 'text-slate-600 hover:text-slate-800'
+          "
+        >
+          Daily
+        </button>
+        <button
+          @click="timeRange = 'weekly'"
+          class="px-3 py-1 text-xs font-medium rounded-md transition-colors"
+          :class="
+            timeRange === 'weekly'
+              ? 'bg-white text-blue-600 shadow-sm'
+              : 'text-slate-600 hover:text-slate-800'
+          "
+        >
+          Weekly
+        </button>
+        <button
+          @click="timeRange = 'monthly'"
+          class="px-3 py-1 text-xs font-medium rounded-md transition-colors"
+          :class="
+            timeRange === 'monthly'
+              ? 'bg-white text-blue-600 shadow-sm'
+              : 'text-slate-600 hover:text-slate-800'
+          "
+        >
+          Monthly
+        </button>
+      </div>
+    </div>
+
+    <div class="h-64">
+      <Line :data="chartData" :options="chartOptions" />
+    </div>
+
+    <div class="grid grid-cols-3 gap-4 mt-6 pt-6 border-t border-slate-100">
+      <div>
+        <p class="text-xs text-slate-500">Total Revenue</p>
+        <p class="text-lg font-bold text-slate-800">$13,600</p>
+        <p class="text-xs text-emerald-600 mt-1">+24.5%</p>
+      </div>
+      <div>
+        <p class="text-xs text-slate-500">Avg. Order Value</p>
+        <p class="text-lg font-bold text-slate-800">$156</p>
+        <p class="text-xs text-emerald-600 mt-1">+8.2%</p>
+      </div>
+      <div>
+        <p class="text-xs text-slate-500">Conversion</p>
+        <p class="text-lg font-bold text-slate-800">12.3%</p>
+        <p class="text-xs text-emerald-600 mt-1">+2.1%</p>
+      </div>
+    </div>
+  </div>
+</template>
+
 <script setup>
 import { ref } from "vue";
 import { Line } from "vue-chartjs";
@@ -88,75 +156,3 @@ const chartOptions = {
   },
 };
 </script>
-
-<template>
-  <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
-    <div class="flex items-center justify-between mb-6">
-      <div>
-        <h3 class="font-semibold text-slate-800">Revenue Trend</h3>
-        <p class="text-xs text-slate-500 mt-1">Last 30 days performance</p>
-      </div>
-
-      <!-- Time Range Selector -->
-      <div class="flex bg-slate-100 rounded-lg p-1">
-        <button
-          @click="timeRange = 'daily'"
-          class="px-3 py-1 text-xs font-medium rounded-md transition-colors"
-          :class="
-            timeRange === 'daily'
-              ? 'bg-white text-blue-600 shadow-sm'
-              : 'text-slate-600 hover:text-slate-800'
-          "
-        >
-          Daily
-        </button>
-        <button
-          @click="timeRange = 'weekly'"
-          class="px-3 py-1 text-xs font-medium rounded-md transition-colors"
-          :class="
-            timeRange === 'weekly'
-              ? 'bg-white text-blue-600 shadow-sm'
-              : 'text-slate-600 hover:text-slate-800'
-          "
-        >
-          Weekly
-        </button>
-        <button
-          @click="timeRange = 'monthly'"
-          class="px-3 py-1 text-xs font-medium rounded-md transition-colors"
-          :class="
-            timeRange === 'monthly'
-              ? 'bg-white text-blue-600 shadow-sm'
-              : 'text-slate-600 hover:text-slate-800'
-          "
-        >
-          Monthly
-        </button>
-      </div>
-    </div>
-
-    <!-- Chart Container -->
-    <div class="h-64">
-      <Line :data="chartData" :options="chartOptions" />
-    </div>
-
-    <!-- Stats Summary -->
-    <div class="grid grid-cols-3 gap-4 mt-6 pt-6 border-t border-slate-100">
-      <div>
-        <p class="text-xs text-slate-500">Total Revenue</p>
-        <p class="text-lg font-bold text-slate-800">$13,600</p>
-        <p class="text-xs text-emerald-600 mt-1">+24.5%</p>
-      </div>
-      <div>
-        <p class="text-xs text-slate-500">Avg. Order Value</p>
-        <p class="text-lg font-bold text-slate-800">$156</p>
-        <p class="text-xs text-emerald-600 mt-1">+8.2%</p>
-      </div>
-      <div>
-        <p class="text-xs text-slate-500">Conversion</p>
-        <p class="text-lg font-bold text-slate-800">12.3%</p>
-        <p class="text-xs text-emerald-600 mt-1">+2.1%</p>
-      </div>
-    </div>
-  </div>
-</template>

@@ -1,15 +1,3 @@
-<script setup>
-defineProps({
-  search: String,
-});
-
-const emit = defineEmits(["update:search"]);
-
-const handleSearch = (e) => {
-  emit("update:search", e.target.value);
-};
-</script>
-
 <template>
   <div
     class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6"
@@ -59,3 +47,15 @@ const handleSearch = (e) => {
     </div>
   </div>
 </template>
+
+<script setup>
+defineProps({
+  search: String,
+});
+
+const emit = defineEmits(["update:search"]);
+
+const handleSearch = (e) => {
+  emit("update:search", e.target.value);
+};
+</script>

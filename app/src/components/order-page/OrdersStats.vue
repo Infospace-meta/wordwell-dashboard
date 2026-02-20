@@ -1,32 +1,3 @@
-<!-- components/OrdersStats.vue -->
-<script setup>
-import { computed } from "vue";
-
-const props = defineProps({
-  orders: {
-    type: Array,
-    required: true,
-  },
-});
-
-const totalOrders = computed(() => props.orders.length);
-const activeOrders = computed(
-  () => props.orders.filter((o) => o.status === "In Progress").length,
-);
-const completedOrders = computed(
-  () => props.orders.filter((o) => o.status === "Completed").length,
-);
-const totalRevenue = computed(() => {
-  return props.orders.reduce(
-    (acc, curr) => acc + parseFloat(curr.amount.replace("$", "")),
-    0,
-  );
-});
-const successRate = computed(() => {
-  return Math.round((completedOrders.value / totalOrders.value) * 100) || 0;
-});
-</script>
-
 <template>
   <div class="grid grid-cols-2 lg:grid-cols-5 gap-4">
     <div
@@ -73,3 +44,31 @@ const successRate = computed(() => {
     </div>
   </div>
 </template>
+
+<script setup>
+import { computed } from "vue";
+
+const props = defineProps({
+  orders: {
+    type: Array,
+    required: true,
+  },
+});
+
+const totalOrders = computed(() => props.orders.length);
+const activeOrders = computed(
+  () => props.orders.filter((o) => o.status === "In Progress").length,
+);
+const completedOrders = computed(
+  () => props.orders.filter((o) => o.status === "Completed").length,
+);
+const totalRevenue = computed(() => {
+  return props.orders.reduce(
+    (acc, curr) => acc + parseFloat(curr.amount.replace("$", "")),
+    0,
+  );
+});
+const successRate = computed(() => {
+  return Math.round((completedOrders.value / totalOrders.value) * 100) || 0;
+});
+</script>

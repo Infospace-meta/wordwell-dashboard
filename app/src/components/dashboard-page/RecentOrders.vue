@@ -1,141 +1,89 @@
-components/dashboard/RecentOrders.vue
-
-
-<script setup>
-import { ref } from "vue";
-
-defineProps({
-  orders: {
-    type: Array,
-    required: true,
-  },
-});
-
-const statusColors = {
-  Completed: "bg-emerald-50 text-emerald-700 ring-1 ring-emerald-600/20",
-  "In Progress": "bg-blue-50 text-blue-700 ring-1 ring-blue-600/20",
-  Pending: "bg-amber-50 text-amber-700 ring-1 ring-amber-600/20",
-  Failed: "bg-rose-50 text-rose-700 ring-1 ring-rose-600/20",
-};
-
-const paymentColors = {
-  Paid: "bg-emerald-50 text-emerald-700 ring-1 ring-emerald-600/20",
-  Pending: "bg-amber-50 text-amber-700 ring-1 ring-amber-600/20",
-  Failed: "bg-rose-50 text-rose-700 ring-1 ring-rose-600/20",
-};
-</script>
-
 <template>
-  <div
-    class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden"
-  >
-    <div
-      class="px-6 py-4 border-b border-slate-100 flex items-center justify-between"
-    >
-      <div>
-        <h3 class="font-semibold text-slate-800">Recent Orders</h3>
-        <p class="text-xs text-slate-500 mt-1">
-          Latest 5 orders from your store
-        </p>
-      </div>
-      <button
-        class="text-sm text-blue-600 hover:text-blue-700 font-medium flex items-center gap-1"
-      >
-        View All
-        <svg
-          class="w-4 h-4"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M9 5l7 7-7 7"
-          />
-        </svg>
-      </button>
-    </div>
+  <div class="bg-white rounded-xl shadow-sm p-6">
+    <h2 class="text-lg font-semibold mb-4">Recent Orders</h2>
 
     <div class="overflow-x-auto">
-      <table class="w-full text-sm">
-        <thead class="bg-slate-50 text-slate-500 text-xs">
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
           <tr>
-            <th class="px-6 py-3 text-left font-medium">Order ID</th>
-            <th class="px-6 py-3 text-left font-medium">Client</th>
-            <th class="px-6 py-3 text-left font-medium">Deadline</th>
-            <th class="px-6 py-3 text-left font-medium">Words</th>
-            <th class="px-6 py-3 text-left font-medium">Amount</th>
-            <th class="px-6 py-3 text-left font-medium">Status</th>
-            <th class="px-6 py-3 text-left font-medium">Payment</th>
-            <th class="px-6 py-3 text-right font-medium">Actions</th>
+            <th
+              class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+            >
+              Order NO
+            </th>
+            <th
+              class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+            >
+              Email
+            </th>
+            <th
+              class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+            >
+              Words
+            </th>
+            <th
+              class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+            >
+              Amount
+            </th>
+            <th
+              class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+            >
+              Payment
+            </th>
           </tr>
         </thead>
-
-        <tbody class="divide-y divide-slate-100">
+        <tbody class="bg-white divide-y divide-gray-200">
           <tr
             v-for="order in orders"
             :key="order.id"
-            class="hover:bg-slate-50 transition-colors"
+            @click="selectOrder(order.id.replace('#', ''))"
+            class="hover:bg-gray-50 cursor-pointer transition-colors"
           >
-            <td class="px-6 py-4 font-mono font-medium text-slate-800">
-              {{ order.id }}
+            <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">
+              #{{ order.order_number }}
             </td>
-            <td class="px-6 py-4">
-              <div class="flex items-center gap-2">
-                <div
-                  class="w-7 h-7 rounded-full bg-linear-to-br from-slate-600 to-slate-700 flex items-center justify-center text-white text-xs font-medium"
-                >
-                  {{ order.email.charAt(0).toUpperCase() }}
-                </div>
-                <span class="text-slate-600">{{ order.email }}</span>
-              </div>
+            <td class="px-6 py-4 whitespace-nowrap text-gray-500">
+              {{ order.email }}
             </td>
-            <td class="px-6 py-4 text-slate-600">{{ order.deadline }}</td>
-            <td class="px-6 py-4 text-slate-600">
-              {{ order.words.toLocaleString() }}
+            <td class="px-6 py-4 whitespace-nowrap text-gray-500">
+              {{ order.words }}
             </td>
-            <td class="px-6 py-4 font-semibold text-slate-800">
+            <td class="px-6 py-4 whitespace-nowrap text-gray-500">
               {{ order.amount }}
             </td>
-
-            <td class="px-6 py-4">
+            <td class="px-6 py-4 whitespace-nowrap">
               <span
-                class="inline-flex px-3 py-1 rounded-full text-xs font-medium"
-                :class="statusColors[order.status]"
-              >
-                {{ order.status }}
-              </span>
-            </td>
-
-            <td class="px-6 py-4">
-              <span
-                class="inline-flex px-3 py-1 rounded-full text-xs font-medium"
-                :class="paymentColors[order.payment]"
+                :class="
+                  order.payment === 'Paid' ? 'text-green-600' : 'text-amber-600'
+                "
+                class="font-medium"
               >
                 {{ order.payment }}
               </span>
-            </td>
-
-            <td class="px-6 py-4 text-right">
-              <button
-                class="px-3 py-1.5 text-xs rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 transition-colors"
-              >
-                View
-              </button>
             </td>
           </tr>
         </tbody>
       </table>
     </div>
 
-    <!-- Table Footer -->
-    <div
-      class="px-6 py-3 border-t border-slate-100 bg-slate-50/50 text-xs text-slate-500 flex items-center justify-between"
-    >
-      <span>Showing {{ orders.length }} orders</span>
-      <span>Updated just now</span>
-    </div>
+    <p v-if="!orders.length" class="text-center text-gray-500 py-8">
+      No recent orders found
+    </p>
   </div>
 </template>
+
+<script setup>
+defineProps({
+  orders: {
+    type: Array,
+    default: () => [],
+  },
+});
+
+const emit = defineEmits(["select-order"]);
+
+const selectOrder = (orderId) => {
+  emit("select-order", orderId);
+};
+</script>
