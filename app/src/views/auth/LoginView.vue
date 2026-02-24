@@ -83,7 +83,7 @@
 
 <script setup>
 import { ref } from "vue";
-import { supabase } from "../helpers/supabase";
+import { supabase } from "../../providers/supabase";
 
 /**VARIABLES */
 const email = ref("");

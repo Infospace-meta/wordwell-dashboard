@@ -34,8 +34,8 @@
 <script setup>
 import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
-import { supabase } from "../helpers/supabase";
-import { useAuthStore } from "../store/auth.store";
+import { supabase } from "../../providers/supabase";
+import { useAuthStore } from "../../store/auth.store";
 
 /**VARIABLES */
 const router = useRouter();
