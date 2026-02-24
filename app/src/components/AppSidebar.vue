@@ -34,7 +34,7 @@ import { RouterLink } from "vue-router";
 // import { logo } from '@/assets/brand/InkWell-Writers-Logo'
 // import { sygnet } from "@/assets/brand/sygnet";
 import { AppSidebarNav } from "@/components/AppSidebarNav.js";
-import { useSidebarStore } from "@/stores/sidebar.js";
+import { useSidebarStore } from "@/store/sidebar.js";
 
 const sidebar = useSidebarStore();
 </script>
