@@ -46,8 +46,8 @@ export const useAuthStore = defineStore("auth", () => {
         .eq("id", user.value.id)
         .maybeSingle();
 
-        console.log(data);
-      profile.value = data;      
+      console.log(data);
+      profile.value = data;
     } catch (err) {
       const errorMessage =
         err.response?.data?.message || "Failed to fetch user profile.";
@@ -98,22 +98,40 @@ export const useAuthStore = defineStore("auth", () => {
 
   /**Check if user exists in local db */
   async function checkUser(email) {
-    if (!email || !email.includes("@")) return; // Basic validation
+    if (!email || !email.includes("@")) return;
 
     checkingEmail.value = true;
     error.value = null;
+    userExists.value = false;
 
     try {
-      await api.get(`/users/check/${email.toLowerCase()}`);
-      userExists.value = true;
-      error.value = null;
-    } catch (err) {
-      userExists.value = false;
-      if (err.response?.status === 404) {
-        error.value = "User not registered. Please contact your administrator.";
+      /**
+       * Query Supabase directly.
+       * We check if the email exists AND if the role is 'ADMIN'
+       */
+      const { data, error: sbError } = await supabase
+        .from("Profile")
+        .select("id, role")
+        .eq("email", email.toLowerCase())
+        .maybeSingle(); // Use maybeSingle to avoid 406 errors on 0 results
+
+      if (sbError) throw sbError;
+
+      if (data && data.role === "ADMIN") {
+        userExists.value = true;
+        error.value = null;
+      } else if (data && data.role !== "ADMIN") {
+        userExists.value = false;
+        error.value =
+          "Access denied. You do not have administrator privileges.";
       } else {
-        error.value = "Unable to verify email.";
+        userExists.value = false;
+        error.value = "User not found. Please contact the system owner.";
       }
+    } catch (err) {
+      console.error("Supabase check error:", err);
+      userExists.value = false;
+      error.value = "An error occurred while verifying your account.";
     } finally {
       checkingEmail.value = false;
     }
@@ -122,8 +140,8 @@ export const useAuthStore = defineStore("auth", () => {
   /**Login with magic link */
   async function loginWithMagicLink(email) {
     loading.value = true;
-    error.value =  null;
-    
+    error.value = null;
+
     try {
       const { error: authError } = await supabase.auth.signInWithOtp({
         email,
@@ -169,4 +187,3 @@ export const useAuthStore = defineStore("auth", () => {
     isLoggedIn: computed(() => !!user.value),
   };
 });
-
