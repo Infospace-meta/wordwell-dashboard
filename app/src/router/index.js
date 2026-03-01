@@ -2,6 +2,8 @@ import { h, resolveComponent } from "vue";
 import { createRouter, createWebHistory } from "vue-router";
 import DefaultLayout from "@/layouts/DefaultLayout.vue";
 import LoginView from "../views/auth/LoginView.vue";
+import AuthConfirm from "../components/auth/AuthConfirm.vue";
+import { useAuthStore } from "../store";
 
 const routes = [
   {
@@ -94,8 +96,6 @@ router.beforeEach(async (to) => {
 });
 
 export default router;
-
-
 
 // import { createRouter, createWebHistory } from "vue-router";
 // import { OrderView, DashboardView } from "../views";
