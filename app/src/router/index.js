@@ -1,7 +1,7 @@
 import { h, resolveComponent } from "vue";
 import { createRouter, createWebHistory } from "vue-router";
-
 import DefaultLayout from "@/layouts/DefaultLayout.vue";
+import LoginView from "../views/auth/LoginView.vue";
 
 const routes = [
   {
@@ -38,6 +38,16 @@ const routes = [
       },
     ],
   },
+  {
+    path: "/login",
+    name: "login",
+    component: LoginView,
+  },
+  {
+    path: "/auth-confirm",
+    name: "auth-confirm",
+    component: AuthConfirm,
+  },
   // Catch-all route for 404
   {
     path: "/:pathMatch(.*)*",
@@ -52,6 +62,35 @@ const router = createRouter({
     // always scroll to top
     return { top: 0 };
   },
+});
+
+router.beforeEach(async (to) => {
+  const auth = useAuthStore();
+
+  /**If the user is just landing, try to restore session first
+   * This "picks up" the session from the Magic Link URL hash
+   */
+  if (!auth.user) {
+    try {
+      await auth.fetchUser();
+    } catch (err) {
+      console.error("Failed to restore session:", err);
+    }
+  }
+
+  const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
+
+  // 2. If route requires auth and we still don't have a user
+  if (requiresAuth && !auth.user) {
+    return {
+      path: "/login",
+      query: { returnUrl: to.fullPath },
+    };
+  }
+
+  /**If user is logged in and tries to go to login page */
+  if (to.name === "login" && auth.user) {
+  }
 });
 
 export default router;
