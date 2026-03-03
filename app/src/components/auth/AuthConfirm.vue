@@ -78,11 +78,11 @@ onMounted(async () => {
     error.value = err.message;
 
     /** Optional: Auto-redirect non-admins to the main site after 3 seconds */
-    // if (err.message.includes("Access Denied")) {
-    //   setTimeout(() => {
-    //     window.location.href = "https://google.com";
-    //   }, 3000);
-    // }
+    if (err.message.includes("Access Denied")) {
+      setTimeout(() => {
+        window.location.href = "https://google.com";
+      }, 3000);
+    }
   }
 });
 </script>
