@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen ">
+  <div class="min-h-screen">
     <main class="p-6 lg:p-8 max-w-7xl mx-auto">
       <!-- Header -->
       <div class="mb-8">
@@ -69,8 +69,6 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import api from "@/services/api";
-
-// Components
 import StatsCards from "@/components/dashboard-page/StatsCards.vue";
 import RecentOrders from "@/components/dashboard-page/RecentOrders.vue";
 import OrderDetail from "@/components/dashboard-page/OrderDetail.vue";

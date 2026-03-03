@@ -60,7 +60,7 @@ onMounted(async () => {
     /**2. CHECK ROLE: This is the security gate */
     const role = session.user.app_metadata?.role;
 
-    if (role === "BRANCH_MANAGER") {
+    if (role === "ADMIN") {
       /**SUCCESS: Sync the store (sets x-token for Axios) */
       await authStore.fetchUser();
       router.push("/");
