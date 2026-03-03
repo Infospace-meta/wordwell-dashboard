@@ -8,6 +8,7 @@ export const useAuthStore = defineStore("auth", () => {
   const user = ref(null);
   // const user = ref(useLocalStorage("user", null));
   const profile = ref(null);
+  const initialized = ref(false);
   const loading = ref(false);
   const apiLoading = ref(false);
   const error = ref(null);
@@ -56,6 +57,7 @@ export const useAuthStore = defineStore("auth", () => {
       throw new Error(errorMessage);
     } finally {
       apiLoading.value = false;
+      initialized.value = true;
     }
   };
 
@@ -174,6 +176,7 @@ export const useAuthStore = defineStore("auth", () => {
   return {
     user,
     profile,
+    initialized,
     apiError,
     apiLoading,
     error,
