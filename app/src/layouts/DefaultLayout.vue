@@ -8,7 +8,7 @@ import AppSidebar from '@/components/AppSidebar.vue'
 <template>
   <div>
     <AppSidebar />
-    <div class="wrapper d-flex flex-column min-vh-100">
+    <div class="wrapper d-flex flex-column min-vh-100 bg-white">
       <AppHeader />
       <div class="body grow">
         <CContainer class="px-4" lg>
