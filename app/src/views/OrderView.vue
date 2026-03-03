@@ -1,6 +1,6 @@
 <template>
   <div
-    class="min-h-screen bg-linear-to-br from-slate-50 via-white to-slate-100 p-6 lg:p-10"
+    class="min-h-screen p-6 lg:p-10"
   >
     <div class="mx-auto max-w-7xl">
       <div class="flex flex-col gap-8">
