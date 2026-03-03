@@ -8,42 +8,21 @@ import DashboardView from "../views/DashboardView.vue";
 import OrderView from "../views/OrderView.vue";
 
 const routes = [
-  { path: "/", redirect: { name: "dashboard" } },
-  { path: "/dashboard", name: "dashboard", component: DashboardView },
-  { path: "/orders", name: "orders", component: OrderView },
+  {
+    path: "/",
+    component: DefaultLayout,
+    redirect: "/dashboard",
+    children: [
+      { path: "dashboard", name: "dashboard", component: DashboardView },
+      { path: "orders", name: "orders", component: OrderView },
+    ],
+  },
   { path: "/login", name: "login", component: LoginView },
   { path: "/auth-confirm", name: "auth-confirm", component: AuthConfirm },
 ];
 
 // const routes = [
-//   {
-//     path: "/",
-//     component: DefaultLayout,
-//     redirect: "/dashboard",
-//     children: [
-//       {
-//         path: "dashboard", // Relative path
-//         name: "Dashboard",
-//         component: () => import("@/views/DashboardView.vue"),
-//       },
-//       {
-//         path: "orders",
-//         name: "Orders",
-//         component: () => import("@/views/OrderView.vue"),
-//       },
-//       {
-//         path: "/login",
-//         name: "login",
-//         component: LoginView,
-//       },
-//       {
-//         path: "/auth-confirm",
-//         name: "auth-confirm",
-//         component: AuthConfirm,
-//       },
-//     ],
-//   },
-//   {
+//     {
 //     path: "/pages",
 //     name: "Pages",
 //     component: { render: () => h(resolveComponent("router-view")) },
@@ -78,19 +57,19 @@ const router = createRouter({ history: createWebHistory(), routes });
 //   },
 // });
 
-// router.beforeEach(async (to, from) => {
-//   // redirect to login page if not logged in and trying to access a restricted page
-//   const publicPages = ["/login"];
-//   const authRequired = !publicPages.includes(to.path);
-//   const auth = useAuthStore();
+router.beforeEach(async (to, from) => {
+  // redirect to login page if not logged in and trying to access a restricted page
+  const publicPages = ["/login"];
+  const authRequired = !publicPages.includes(to.path);
+  const auth = useAuthStore();
 
-//   /**add function to check if user is logged in */
-//   if (authRequired && !auth.user) {
-//     auth.returnUrl = to.fullPath;
-//     auth.isLoginModalOpen = true;
-//     return from.fullPath;
-//     // return "/login";
-//   }
-// });
+  /**add function to check if user is logged in */
+  if (authRequired && !auth.user) {
+    auth.returnUrl = to.fullPath;
+    auth.isLoginModalOpen = true;
+    // return from.fullPath;
+    return "/login";
+  }
+});
 
 export default router;

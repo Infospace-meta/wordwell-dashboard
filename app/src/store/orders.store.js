@@ -1,4 +1,4 @@
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { defineStore } from "pinia";
 import api from "../providers/api/axios";
 
@@ -15,6 +15,34 @@ export const useOrderStore = defineStore("orders", () => {
   const loading = ref(false);
   const error = ref(null);
 
+  /**
+   * GETTERS (Computed)
+   * These calculate stats automatically whenever the 'orders' array changes
+   */
+  const stats = computed(() => {
+    const data = orders.value;
+    const totalOrders = data.length;
+    const paid = data.filter((o) => o.status === "PAID").length;
+    const inProgress = data.filter((o) => o.status === "IN_PROGRESS").length;
+    const completed = data.filter((o) => o.status === "COMPLETED").length;
+    const revenue = data.reduce(
+      (sum, o) => sum + Number(o.total_price || 0),
+      0,
+    );
+
+    return [
+      { title: "Total Orders", value: totalOrders, icon: "shopping-bag" },
+      { title: "Paid Orders", value: paid, icon: "credit-card" },
+      { title: "In Progress", value: inProgress, icon: "clock" },
+      { title: "Completed", value: completed, icon: "check-circle" },
+      {
+        title: "Revenue",
+        value: `$${revenue.toLocaleString()}`,
+        icon: "trending-up",
+      },
+    ];
+  });
+
   /**ACTIONS */
   /**Fetch orders from API based on filter object
    * [filters={}] - Optional filters (e.g., { status: 'ACTIVE', storeId: '...' })
@@ -25,9 +53,15 @@ export const useOrderStore = defineStore("orders", () => {
 
     try {
       const { data } = await api.get(`/orders`);
-
-      orders.value = data;
-      return data;
+      /**Map data for the RecentOrders table requirements */
+      orders.value = data.map((order) => ({
+        ...order,
+        displayId: `#${order.order_number}`,
+        email: order.user?.email ?? "N/A",
+        words: order.pages * 275,
+        amount: `$${Number(order.total_price || 0).toFixed(2)}`,
+        payment: order.status === "PAID" ? "Paid" : "Pending",
+      }));
     } catch (err) {
       const errorMessage =
         err.response?.data?.message || "Failed to fetch orders.";
@@ -65,10 +99,20 @@ export const useOrderStore = defineStore("orders", () => {
 
     try {
       const { data } = await api.patch(`/orders/${orderId}`, patchData);
+
       /**Find and update the order in our local list for instant reactivity */
       const index = orders.value.findIndex((o) => o.id === orderId);
       if (index !== -1) {
-        orders.value[index] = { ...orders.value[index], ...data };
+        orders.value[index] = {
+          ...orders.value[index],
+          ...data,
+          payment: data.status === "PAID" ? "Paid" : "Pending",
+        };
+      }
+
+      /**Update current selected view */
+      if (currentOrder.value?.id === orderId) {
+        currentOrder.value = { ...currentOrder.value, ...data };
       }
       return data;
     } catch (err) {
@@ -108,6 +152,7 @@ export const useOrderStore = defineStore("orders", () => {
     currentOrder,
     loading,
     error,
+    stats,
     fetchOrders,
     fetchOrderById,
     updateOrder,
