@@ -59,6 +59,7 @@ onMounted(async () => {
 
     /**2. CHECK ROLE: This is the security gate */
     const role = session.user.app_metadata?.role;
+    console.log(role);
 
     if (role === "ADMIN") {
       /**SUCCESS: Sync the store (sets x-token for Axios) */
@@ -77,11 +78,11 @@ onMounted(async () => {
     error.value = err.message;
 
     /** Optional: Auto-redirect non-admins to the main site after 3 seconds */
-    if (err.message.includes("Access Denied")) {
-      setTimeout(() => {
-        window.location.href = "https://google.com";
-      }, 3000);
-    }
+    // if (err.message.includes("Access Denied")) {
+    //   setTimeout(() => {
+    //     window.location.href = "https://google.com";
+    //   }, 3000);
+    // }
   }
 });
 </script>

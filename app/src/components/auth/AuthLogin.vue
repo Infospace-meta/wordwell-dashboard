@@ -5,7 +5,7 @@
     <!-- Logo -->
     <div class="mb-10">
       <img
-        src="../assets/images/adaptive-icon.png"
+        src="../../assets/brand/InkWell-Writers-Logo.png"
         alt="Bajeti Logo"
         class="w-24 h-auto"
       />
@@ -18,9 +18,9 @@
         v-if="!isEmailSent"
         class="border border-black/5 rounded-2xl p-8 shadow-sm"
       >
-        <h1 class="text-2xl text-gray-700 text-center my-3">Bajeti Store</h1>
+        <h1 class="text-2xl text-gray-700 text-center my-3">Wordwell Admin</h1>
         <p class="text-gray-600 text-center mb-8 text-sm">
-          Sign in to manage your inventory
+          Sign in to admin dashboard
         </p>
 
         <div class="space-y-5">
@@ -109,7 +109,7 @@
 
     <!-- Footer -->
     <p class="mt-8 text-gray-400 text-xs tracking-widest">
-      &copy; Bajeti Store 2026 - All Rights Reserved
+      &copy; Wordwell Writers 2026 - All Rights Reserved
     </p>
   </div>
 </template>

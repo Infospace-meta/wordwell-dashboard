@@ -1,5 +1,5 @@
 <template>
-  <div class="max-w-5xl mx-auto"><AuthLogin /></div>
+  <div class=""><AuthLogin /></div>
 </template>
 
 <script setup>
