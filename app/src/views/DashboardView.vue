@@ -75,10 +75,19 @@ import OrderDetail from "@/components/dashboard-page/OrderDetail.vue";
 import TopPerformingWriters from "@/components/dashboard-page/TopPerformingWriters.vue";
 import PendingReviews from "@/components/dashboard-page/PendingReviews.vue";
 import QuickActions from "@/components/dashboard-page/QuickActions.vue";
+import { useOrderStore } from "../store/orders.store";
 
+/**VARIABLES */
+const orderStore = useOrderStore();
 const orders = ref([]);
 const stats = ref([]);
 const selectedOrder = ref(null);
+
+/**FUNCTIONS */
+/**Onload function */
+onMounted(async () => {
+  orderStore.fetchOrders();
+});
 
 const fetchOrders = async () => {
   try {
