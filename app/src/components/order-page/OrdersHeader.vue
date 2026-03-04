@@ -5,7 +5,7 @@
     <div class="space-y-2">
       <div class="flex items-center gap-3">
         <p
-          class="text-2xl bg-linear-to-r from-slate-800 to-slate-700 bg-clip-text text-transparent"
+          class="text-lg font-semibold text-gray-900"
         >
           Orders
       </p>
@@ -36,7 +36,7 @@
         @input="handleSearch"
         type="text"
         placeholder="Search by order ID or email..."
-        class="w-full pl-12 pr-5 py-2 rounded-lg border border-slate-200 text-slate-700 placeholder-slate-400"
+        class="w-full pl-12 pr-5 py-2 rounded-lg border border-slate-200 text-slate-700 placeholder-slate-400 focus:outline-none focus:ring focus:ring-slate-300 focus:border-transparent focus:placeholder:text-white"
       />
     </div>
   </div>
