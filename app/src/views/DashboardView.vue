@@ -38,25 +38,6 @@
           </div>
         </div>
       </div>
-
-      <!-- Bottom cards – adapt layout when detail is open -->
-      <!-- <div class="mt-6">
-        <div
-          class="grid gap-6"
-          :class="
-            selectedOrder
-              ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'
-              : 'grid-cols-1 md:grid-cols-3'
-          "
-        >
-          <TopPerformingWriters />
-          <PendingReviews />
-          <QuickActions
-            @new-order="handleNewOrder"
-            @add-writer="handleAddWriter"
-          />
-        </div>
-      </div> -->
     </main>
   </div>
 </template>
@@ -67,9 +48,6 @@ import { useAuthStore, useOrderStore } from "@/store";
 import StatsCards from "@/components/dashboard-page/StatsCards.vue";
 import RecentOrders from "@/components/dashboard-page/RecentOrders.vue";
 import OrderDetail from "@/components/dashboard-page/OrderDetail.vue";
-import TopPerformingWriters from "@/components/dashboard-page/TopPerformingWriters.vue";
-import PendingReviews from "@/components/dashboard-page/PendingReviews.vue";
-import QuickActions from "@/components/dashboard-page/QuickActions.vue";
 
 /**VARIABLES */
 const orderStore = useOrderStore();
