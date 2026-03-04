@@ -40,7 +40,7 @@
             @click="selectOrder(order.id.replace('#', ''))"
             class="hover:bg-gray-50 cursor-pointer transition-colors"
           >
-            <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">
+            <td class="px-6 py-4 whitespace-nowrap text-gray-700">
               #{{ order.order_number }}
             </td>
             <td class="px-6 py-4 whitespace-nowrap text-gray-500">
