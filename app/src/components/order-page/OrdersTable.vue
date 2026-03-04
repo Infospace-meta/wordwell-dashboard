@@ -4,7 +4,7 @@
       <table class="min-w-full text-sm">
         <thead>
           <tr
-            class="border-b-2 border-slate-200"
+            class="border-b border-slate-200"
           >
             <th class="px-6 py-3 text-left">
               <span

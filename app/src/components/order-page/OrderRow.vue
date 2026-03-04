@@ -1,15 +1,11 @@
 <template>
-  <tr
-    class="group hover:bg-linear-to-r hover:from-slate-50/50 hover:to-white transition-all duration-300"
-  >
+  <tr class="group hover:bg-neutral-400/5 transition-all duration-300">
     <td class="px-6 py-5">
       <div class="flex flex-col">
-        <span
-          class="font-mono font-semibold text-slate-800 group-hover:text-blue-600 transition-colors"
-        >
+        <span class="text-slate-800 transition-colors">
           {{ order.id }}
         </span>
-        <span class="text-xs text-slate-500 mt-1 flex items-center gap-1">
+        <span class="text-sm text-slate-500 mt-1 flex items-center gap-1">
           <svg
             class="h-3 w-3"
             fill="none"
@@ -67,7 +63,7 @@
     </td>
 
     <td class="px-6 py-5">
-      <span class="font-bold text-slate-800 text-lg">
+      <span class="text-neutral-800 text-lg font-medium">
         {{ order.amount }}
       </span>
     </td>
@@ -83,8 +79,9 @@
     <td class="px-6 py-5 text-right">
       <div class="flex items-center justify-end gap-2">
         <button
-          class="px-4 py-2 text-xs font-medium rounded-xl bg-slate-100 text-slate-600 hover:bg-slate-200 transition-all duration-200 shadow-sm hover:shadow flex items-center gap-1"
+          class="px-4 py-2 text-sm  rounded-lg text-neutral-400 border border-neutral-300 hover:cursor-pointer hover:text-blue-800 hover:border-blue-800 transition-all duration-200 flex items-center gap-1"
         >
+          View
           <svg
             class="h-3.5 w-3.5"
             fill="none"
@@ -104,26 +101,12 @@
               d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
             />
           </svg>
-          View
         </button>
 
         <button
           v-if="order.status !== 'Completed'"
-          class="px-4 py-2 text-xs font-medium rounded-xl bg-linear-to-r from-blue-600 to-indigo-600 text-white hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 shadow-lg shadow-blue-600/25 hover:shadow-xl hover:shadow-blue-600/30 flex items-center gap-1"
+          class="px-4 py-2 text-sm bg-green-700 hover:bg-green-800 hover:cursor-pointer text-white rounded-md transition-all duration-200 flex items-center gap-1"
         >
-          <svg
-            class="h-3.5 w-3.5"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M5 13l4 4L19 7"
-            />
-          </svg>
           Complete
         </button>
       </div>
