@@ -1,6 +1,6 @@
 <template>
   <header
-    class="sticky top-0 z-30 flex h-16 w-full items-center justify-between px-4 text-neutral-700 shadow-sm border-b border-white/10"
+    class="sticky top-0 z-30 flex h-16 w-full items-center justify-between px-4 bg-white text-neutral-700 shadow-sm border-b border-white/10"
   >
     <!-- Left: Menu Toggle -->
     <button

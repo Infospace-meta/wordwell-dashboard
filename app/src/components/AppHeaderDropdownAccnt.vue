@@ -4,12 +4,12 @@
     <button
       @click="isOpen = !isOpen"
       type="button"
-      class="flex items-center rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-neutral-800"
+      class="flex items-center rounded-full"
       id="user-menu-button"
     >
       <span class="sr-only">Open user menu</span>
       <img
-        class="h-10 w-10 rounded-full border-2 border-neutral-700 object-cover"
+        class="h-12 w-12 rounded-full object-cover border border-black/10"
         :src="avatar"
         alt="User Avatar"
       />
@@ -26,12 +26,12 @@
     >
       <div
         v-if="isOpen"
-        class="absolute right-0 z-50 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+        class="absolute right-0 z-50 mt-2 w-48 origin-top-right rounded-md bg-red-50 shadow-2xl border border-red-500/20"
       >
         <!-- Logout Item -->
         <button
           @click="handleLogout"
-          class="flex w-full items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+          class="flex w-full items-center px-4 py-3 text-sm text-red-700 hover:bg-red-100 transition-colors"
         >
           <!-- Material Symbol Icon (consistent with your header) -->
           <span class="material-symbols-outlined mr-2 text-lg">logout</span>
