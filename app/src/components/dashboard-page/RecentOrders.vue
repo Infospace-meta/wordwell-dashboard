@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-white rounded-xl border border-gray-200 p-6">
+  <div class="bg-white rounded-xl border border-gray-200 p-6 h-[50vh] overflow-auto">
     <p class="text-2xl mb-4">Recent Orders</p>
 
     <div class="overflow-x-auto">
