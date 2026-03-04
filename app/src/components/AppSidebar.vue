@@ -23,37 +23,57 @@
         src="../assets/brand/InkWell-Writers-Logo.png"
         alt="Logo"
         :class="[
-          sidebar.unfoldable ? 'h-8' : 'h-16',
+          sidebar.unfoldable ? 'hidden' : 'h-16',
           'transition-all duration-300',
         ]"
       />
     </div>
 
     <!-- Nav Links -->
-    <nav class="flex-1 overflow-y-auto py-4 px-3 space-y-1">
+    <nav
+      :class="
+        sidebar.unfoldable
+          ? 'flex-1 overflow-y-auto py-4 px-1.5 space-y-1'
+          : 'flex-1 overflow-y-auto py-4 px-3 space-y-1'
+      "
+    >
       <RouterLink
+        active-class="bg-black/5"
         to="/dashboard"
-        class="flex p-4 rounded-lg hover:bg-neutral-200 text-lg items-center"
+        :class="
+          sidebar.unfoldable
+            ? 'flex justify-center items-center p-2 rounded-lg'
+            : 'flex p-4 rounded-lg hover:bg-neutral-200 text-lg items-center'
+        "
       >
         <span class="material-symbols-sharp"> analytics </span>
         <p
-          class="ml-3 font-semibold"
+          class="font-semibold"
           :class="
-            sidebar.unfoldable ? 'opacity-0 w-0 overflow-hidden' : 'opacity-100'
+            sidebar.unfoldable
+              ? 'opacity-0 w-0 overflow-hidden'
+              : 'ml-3 opacity-100'
           "
         >
           Dashboard
         </p>
       </RouterLink>
       <RouterLink
+        active-class="bg-black/5"
         to="/orders"
-        class="flex p-4 rounded-lg hover:bg-neutral-200 text-lg items-center"
+        :class="
+          sidebar.unfoldable
+            ? 'flex justify-center items-center p-2 rounded-lg'
+            : 'flex p-4 rounded-lg hover:bg-neutral-200 text-lg items-center'
+        "
       >
         <span class="material-symbols-sharp"> rubric </span>
         <p
-          class="ml-3 font-semibold"
+          class="font-semibold"
           :class="
-            sidebar.unfoldable ? 'opacity-0 w-0 overflow-hidden' : 'opacity-100'
+            sidebar.unfoldable
+              ? 'opacity-0 w-0 overflow-hidden'
+              : 'ml-3 opacity-100'
           "
         >
           Orders
