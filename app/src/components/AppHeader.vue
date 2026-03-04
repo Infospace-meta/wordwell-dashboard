@@ -1,38 +1,29 @@
 <template>
-  <CHeader position="sticky" :class="headerClassNames">
-    <CContainer class="border-bottom px-4" fluid>
-      <CHeaderToggler
-        @click="sidebar.toggleVisible()"
-        style="margin-inline-start: -14px"
-      >
-        <CIcon icon="cil-menu" size="lg" />
-      </CHeaderToggler>
-      <CHeaderNav class="d-none d-md-flex">
-        <CNavItem>
-          <CNavLink href="/dashboard"> Dashboard </CNavLink>
-        </CNavItem>
-      </CHeaderNav>
-      <CHeaderNav>
+  <Header class="flex w-full flex-col sticky-top bg-white">
+    <Container
+      class="border-bottom px-4 flex w-full justify-content-between items-center h-13"
+      fluid
+    >
+      <div @click="sidebar.toggleVisible()" style="margin-inline-start: -14px">
+        <span class="material-symbols-outlined"> menu </span>
+      </div>
         <AppHeaderDropdownAccnt />
-      </CHeaderNav>
-    </CContainer>
-    <CContainer class="px-4" fluid>
+    </Container>
+    <!-- <Container class="px-4 mx-auto w-full flex items-center h-8">
       <AppBreadcrumb />
-    </CContainer>
-  </CHeader>
+    </Container> -->
+  </Header>
 </template>
 
 <script setup>
 import { onMounted, ref } from "vue";
 import { useColorModes } from "@coreui/vue";
-
-import AppBreadcrumb from "@/components/AppBreadcrumb.vue";
 import AppHeaderDropdownAccnt from "@/components/AppHeaderDropdownAccnt.vue";
 import { useSidebarStore } from "@/store/sidebar.js";
 
 const headerClassNames = ref("mb-4 p-0");
 const { colorMode, setColorMode } = useColorModes(
-  "coreui-free-vue-admin-template-theme",
+  "coreui-free-vue-admin-template-theme"
 );
 const sidebar = useSidebarStore();
 
