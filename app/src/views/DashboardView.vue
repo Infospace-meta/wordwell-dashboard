@@ -1,13 +1,10 @@
 <template>
-  <div class="min-h-screen">
-    <main class="p-6 lg:p-8 max-w-7xl mx-auto">
+  <div class="">
+    <main class="p-6 max-w-7xl mx-auto">
       <!-- Header -->
       <div class="mb-8">
-        <h1 class="text-3xl font-bold text-slate-800">
+        <p class="text-4xl text-slate-800">
           Welcome back, Admin 👋
-        </h1>
-        <p class="text-slate-500 mt-1">
-          Here's what's happening with your orders today
         </p>
       </div>
 
@@ -15,7 +12,7 @@
       <StatsCards :stats="orderStore.stats" />
 
       <!-- Main content: Recent Orders + Order Detail -->
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-8">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-4">
         <div class="lg:col-span-2">
           <RecentOrders
             :orders="orderStore.orders"
@@ -35,7 +32,7 @@
           />
           <div
             v-else
-            class="bg-white rounded-xl shadow-sm p-6 h-full flex items-center justify-center text-center text-gray-400 border-2 border-dashed"
+            class="bg-white rounded-xl p-6 h-full flex items-center justify-center text-center text-gray-400 border border-dashed"
           >
             <p>Select an order to view full details</p>
           </div>

@@ -1,15 +1,12 @@
 <template>
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-    <div 
-      v-for="stat in stats" 
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2">
+    <div
+      v-for="stat in stats"
       :key="stat.title"
-      class="bg-white rounded-xl shadow-sm p-6 flex flex-col"
+      class="rounded-xl p-3 border border-gray-200 bg-white"
     >
-      <div class="flex items-center justify-between mb-4">
-        <h3 class="text-sm font-medium text-gray-500">{{ stat.title }}</h3>
-        <Icon :name="stat.icon" class="w-5 h-5 text-gray-400" />
-      </div>
-      <p class="text-2xl font-bold text-gray-900">{{ stat.value }}</p>
+      <p class="text-gray-600">{{ stat.title }}</p>
+      <p class="text-gray-700">{{ stat.value }}</p>
     </div>
   </div>
 </template>
@@ -18,7 +15,7 @@
 defineProps({
   stats: {
     type: Array,
-    default: () => []
-  }
+    default: () => [],
+  },
 });
 </script>

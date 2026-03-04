@@ -1,5 +1,5 @@
 <template>
-  <CFooter class="px-4">
+  <CFooter class="px-4 bg-white">
     <div>
       <a href="https://wordwellwriters.com/" target="_blank">WordWell Writers</a>
       <span class="ms-1"

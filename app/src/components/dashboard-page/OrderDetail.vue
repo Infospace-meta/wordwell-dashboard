@@ -1,7 +1,7 @@
 <template>
-  <div class="bg-white rounded-xl shadow-sm border border-gray-200 h-full flex flex-col overflow-hidden">
+  <div class="bg-white rounded-xl border border-gray-200 h-full flex flex-col overflow-hidden">
     <!-- Header – smaller & cleaner -->
-    <div class="px-4 py-3 border-b border-gray-100 flex items-center justify-between bg-gray-50/80">
+    <div class="px-4 py-3 border-b border-gray-200 flex items-center justify-between bg-gray-50/80">
       <h2 class="text-base font-semibold text-gray-900">
         Order #{{ order.order_number }}
       </h2>
