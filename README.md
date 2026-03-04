@@ -1,19 +1,19 @@
-# Vue 3 + Vite
-
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
-
-## Recommended IDE Setup
-
-- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
-
-# Vue-template
-Let's build with vue
+<p align="center">
+  <a href="https://wordwell.com/">
+    <img alt="Word Well Dashboard" height="150" src="InkWell-Writers-Logo.png">
+    <!-- <h3 align="center">Trinity Chapel Nakuru</h3> -->
+  </a>
+</p>
 
 ## Initialising the repository
-> cd app
-> npm install
-> npm run dev
 
-=> Open a new terminal and initialize the json server
-> npm install -g json-server
-> json-server --watch data/db.json
+```sh
+# app directory
+cd app
+
+# install node modules
+npm install
+
+# Run the developemnt server
+npm run dev
+```
