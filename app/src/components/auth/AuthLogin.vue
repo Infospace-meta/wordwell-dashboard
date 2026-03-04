@@ -1,25 +1,24 @@
 <template>
   <div
-    class="min-h-[80vh] bg-white flex flex-col justify-center items-center p-4 font-sans"
+    class="min-h-[100vh] bg-white flex flex-col justify-center items-center p-4 font-sans"
   >
-    <!-- Logo -->
-    <div class="mb-10">
-      <img
-        src="../../assets/brand/InkWell-Writers-Logo.png"
-        alt="Bajeti Logo"
-        class="w-24 h-auto"
-      />
-    </div>
-
     <!-- Main Card -->
     <div class="w-full max-w-md">
       <!-- STATE 1: LOGIN FORM -->
       <div
         v-if="!isEmailSent"
-        class="border border-black/5 rounded-2xl p-8 shadow-sm"
+        class="border border-black/5 rounded-2xl p-8 "
       >
-        <h1 class="text-2xl text-gray-700 text-center my-3">Wordwell Admin</h1>
-        <p class="text-gray-600 text-center mb-8 text-sm">
+        <!-- Logo -->
+        <div class="mb-10 flex justify-center items-center">
+          <img
+            src="../../assets/brand/InkWell-Writers-Logo.png"
+            alt="wordwell Logo"
+            class="w-54 h-auto"
+          />
+        </div>
+        <!-- <h1 class="text-2xl text-gray-700 text-center my-3">Wordwell Admin</h1> -->
+        <p class="text-gray-600 text-center mb-8">
           Sign in to admin dashboard
         </p>
 
@@ -50,7 +49,7 @@
               v-if="authStore.error"
               class="text-red-400 text-xs mt-2 ml-1 flex items-center gap-1"
             >
-              <span class="material-symbols-outlined text-xs">error</span>
+              <span class="material-symbols-outlined text-xs">Error :</span>
               {{ authStore.error }}
             </p>
           </div>
@@ -108,7 +107,7 @@
     </div>
 
     <!-- Footer -->
-    <p class="mt-8 text-gray-400 text-xs tracking-widest">
+    <p class="pt-10 text-gray-400 text-xs tracking-widest">
       &copy; Wordwell Writers 2026 - All Rights Reserved
     </p>
   </div>
