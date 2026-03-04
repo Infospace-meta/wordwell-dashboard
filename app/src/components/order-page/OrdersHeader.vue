@@ -36,7 +36,7 @@
         @input="handleSearch"
         type="text"
         placeholder="Search by order ID or email..."
-        class="w-full pl-12 pr-5 py-2 rounded-2xl border border-slate-200 text-slate-700 placeholder-slate-400"
+        class="w-full pl-12 pr-5 py-2 rounded-lg border border-slate-200 text-slate-700 placeholder-slate-400"
       />
     </div>
   </div>

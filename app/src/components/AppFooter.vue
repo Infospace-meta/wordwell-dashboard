@@ -1,5 +1,5 @@
 <template>
-  <Footer class="px-4 bg-white flex border-top small text-muted py-3 sticky-bottom">
+  <Footer class="px-4 bg-white flex border-t border-t-neutral-200 text-sm text-neutral-500 py-3 sticky bottom-0">
     <div>
       <a href="https://wordwellwriters.com/" target="_blank">WordWell Writers</a>
       <span class="ms-1"

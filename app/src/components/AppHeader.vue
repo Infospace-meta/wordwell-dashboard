@@ -1,39 +1,24 @@
 <template>
-  <Header class="flex w-full flex-col sticky-top bg-white">
-    <Container
-      class="border-bottom px-4 flex w-full justify-content-between items-center h-13"
-      fluid
+  <header
+    class="sticky top-0 z-30 flex h-16 w-full items-center justify-between px-4 text-neutral-700 shadow-sm border-b border-white/10"
+  >
+    <!-- Left: Menu Toggle -->
+    <button
+      @click="sidebar.toggleVisible()"
+      class="flex p-2 rounded-md active:bg-neutral-100 transition-colors"
     >
-      <div @click="sidebar.toggleVisible()" style="margin-inline-start: -14px">
-        <span class="material-symbols-outlined"> menu </span>
-      </div>
-        <AppHeaderDropdownAccnt />
-    </Container>
-    <!-- <Container class="px-4 mx-auto w-full flex items-center h-8">
-      <AppBreadcrumb />
-    </Container> -->
-  </Header>
+      <span class="material-symbols-outlined block">menu</span>
+    </button>
+
+    <!-- Right: Account Dropdown -->
+    <div class="flex items-center">
+      <AppHeaderDropdownAccnt />
+    </div>
+  </header>
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue";
-import { useColorModes } from "@coreui/vue";
 import AppHeaderDropdownAccnt from "@/components/AppHeaderDropdownAccnt.vue";
 import { useSidebarStore } from "@/store/sidebar.js";
-
-const headerClassNames = ref("mb-4 p-0");
-const { colorMode, setColorMode } = useColorModes(
-  "coreui-free-vue-admin-template-theme"
-);
 const sidebar = useSidebarStore();
-
-onMounted(() => {
-  document.addEventListener("scroll", () => {
-    if (document.documentElement.scrollTop > 0) {
-      headerClassNames.value = "mb-4 p-0 shadow-sm";
-    } else {
-      headerClassNames.value = "mb-4 p-0";
-    }
-  });
-});
 </script>

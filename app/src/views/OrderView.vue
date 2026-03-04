@@ -1,17 +1,21 @@
 <template>
-  <div
-    class="min-h-screen p-6 lg:p-10"
-  >
-    <div class="mx-auto max-w-7xl">
-      <div class="flex flex-col gap-8">
+  <div>
+    <div class="mx-auto max-w-7xl p-6">
+      <div class="flex flex-col gap-2">
         <OrdersHeader v-model:search="search" />
-        <OrdersStats :orders="orders" />
-        <OrdersFilters v-model:activeFilter="activeFilter" :filters="filters" />
-        <OrdersTable
-          :orders="orders"
-          :search="search"
-          :active-filter="activeFilter"
-        />
+        <!-- <OrdersStats :orders="orders" /> -->
+        <div class="border rounded-lg border-neutral-200">
+          <OrdersFilters
+            v-model:activeFilter="activeFilter"
+            :filters="filters"
+          />
+
+          <OrdersTable
+            :orders="orders"
+            :search="search"
+            :active-filter="activeFilter"
+          />
+        </div>
       </div>
     </div>
   </div>

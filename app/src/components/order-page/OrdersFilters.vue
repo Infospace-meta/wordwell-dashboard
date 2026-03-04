@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-wrap justify-end gap-1">
+  <div class="flex flex-wrap justify-end border-neutral-200 py-4 px-6">
     <button
       v-for="filter in filters"
       :key="filter"
@@ -7,8 +7,8 @@
       class="px-4 py-1"
       :class="[
         activeFilter === filter
-          ? 'bg-linear-to-r from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-600/25 rounded-2xl'
-          : 'bg-white text-slate-600 border rounded-2xl border-slate-200 hover:border-blue-500/50 hover:bg-slate-50/80',
+          ? 'bg-neutral-50 text-blue-600 border-neutral-300 mx-2'
+          : 'bg-white text-neutral-600 border-neutral-200 hover:bg-neutral-50/80',
       ]"
     >
       {{ filter }}

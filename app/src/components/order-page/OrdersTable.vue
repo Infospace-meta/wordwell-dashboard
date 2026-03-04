@@ -1,10 +1,10 @@
 <template>
-  <div class="bg-white rounded-lg border border-slate-200 overflow-hidden">
+  <div class="bg-white rounded-lg overflow-hidden">
     <div class="overflow-x-auto">
       <table class="min-w-full text-sm">
         <thead>
           <tr
-            class="bg-linear-to-r from-slate-50 to-white border-b-2 border-slate-200"
+            class="border-b-2 border-slate-200"
           >
             <th class="px-6 py-3 text-left">
               <span
