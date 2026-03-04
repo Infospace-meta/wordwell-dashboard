@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://wordwell.com/">
-    <img alt="Word Well Dashboard" height="150" src="inkWell-Writers-Logo.png">
+    <img alt="Word Well Dashboard" height="150" src="InkWell-Writers-Logo.png">
     <!-- <h3 align="center">Trinity Chapel Nakuru</h3> -->
   </a>
 </p>
