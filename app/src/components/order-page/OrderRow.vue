@@ -79,7 +79,7 @@
     <td class="px-6 py-5 text-right">
       <div class="flex items-center justify-end gap-2">
         <button
-          class="px-4 py-2 text-sm  rounded-lg text-neutral-400 border border-neutral-300 hover:cursor-pointer hover:text-blue-800 hover:border-blue-800 transition-all duration-200 flex items-center gap-1"
+          class="px-4 py-2 text-sm rounded-lg text-neutral-400 border border-neutral-300 hover:cursor-pointer hover:text-blue-800 hover:border-blue-800 transition-all duration-200 flex items-center gap-1"
         >
           View
           <svg
