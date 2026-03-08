@@ -1,4 +1,3 @@
-import { h, resolveComponent } from "vue";
 import { createRouter, createWebHistory } from "vue-router";
 import DefaultLayout from "@/layouts/DefaultLayout.vue";
 import LoginView from "../views/LoginView.vue";
