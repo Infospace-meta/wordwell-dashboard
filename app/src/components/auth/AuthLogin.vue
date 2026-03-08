@@ -1,6 +1,6 @@
 <template>
   <div
-    class="min-h-[100vh] bg-white flex flex-col justify-center items-center p-4 font-sans"
+    class="min-h-screen bg-white flex flex-col justify-center items-center p-4 font-sans"
   >
     <!-- Main Card -->
     <div class="w-full max-w-md">

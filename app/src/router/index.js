@@ -11,6 +11,7 @@ const routes = [
   {
     path: "/",
     component: DefaultLayout,
+    meta: { requiresAuth: true }, //add auth guard
     redirect: "/dashboard",
     children: [
       { path: "dashboard", name: "dashboard", component: DashboardView },
@@ -21,63 +22,42 @@ const routes = [
   { path: "/auth-confirm", name: "auth-confirm", component: AuthConfirm },
 ];
 
-// const routes = [
-//     {
-//     path: "/pages",
-//     name: "Pages",
-//     component: { render: () => h(resolveComponent("router-view")) },
-//     children: [
-//       {
-//         path: "404",
-//         name: "Page404",
-//         component: () => import("@/views/pages/Page404.vue"),
-//       },
-//       {
-//         path: "login",
-//         name: "Login",
-//         component: () => import("@/views/pages/Login.vue"),
-//       },
-//     ],
-//   },
-
-//   // Catch-all route for 404
-//   {
-//     path: "/:pathMatch(.*)*",
-//     redirect: "/pages/404",
-//   },
-// ];
-
 const router = createRouter({ history: createWebHistory(), routes });
 
-// router.beforeEach(async (to, from, next) => {
-//   const auth = useAuthStore();
+router.beforeEach(async (to) => {
+  const auth = useAuthStore();
 
-//   /** If the store hasn't checked for a session yet, do it now. */
-//   if (!auth.initialized) {
-//     await auth.fetchUser();
-//   }
+  /**If the user is just landing, try to restore session first
+   * This "picks up" the session from the Magic Link URL hash
+   */
+  if (!auth.user) {
+    try {
+      await auth.fetchUser();
+    } catch (err) {
+      console.error("Failed to restore session:", err);
+    }
+  }
 
-//   /** redirect to login page if not logged in and trying to access a restricted page */
-//   const publicPages = ["/login", "/auth-confirm"];
-//   const authRequired = !publicPages.includes(to.path);
+  const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
 
-//   /**add function to check if user is logged in */
-//   if (authRequired && !auth.isLoggedIn && auth.profile?.role !== "ADMIN") {
-//     console.warn("Non-admin tried to access admin dashboard");
-//     await auth.logout();
-//     return next({ name: "login" });
-//   }
+  // 2. If route requires auth and we still don't have a user
+  if (requiresAuth && !auth.isLoggedIn && auth.profile?.role !== "ADMIN") {
+    console.warn("Non-admin tried to access admin dashboard");
+    await auth.logout();
+    return {
+      path: "/login",
+      query: { returnUrl: to.fullPath },
+    };
+  }
 
-//   /**Already logged in and trying to go to login page */
-//   if (
-//     to.path === "/login" &&
-//     auth.isLoggedIn &&
-//     auth.profile?.role === "ADMIN"
-//   ) {
-//     return next({ name: "dashboard" });
-//   }
-
-//   next(); // Proceed as normal
-// });
+  /**If user is logged in and tries to go to login page */
+  if (
+    (to.name === "login" || to.name === "signup") &&
+    auth.isLoggedIn &&
+    auth.profile?.role === "ADMIN"
+  ) {
+    return { path: "/" };
+  }
+});
 
 export default router;
