@@ -4,18 +4,12 @@
   >
     <div class="space-y-2">
       <div class="flex items-center gap-3">
-        <div
-          class="h-10 w-2 bg-linear-to-b from-blue-600 to-indigo-600 rounded-full"
-        ></div>
-        <h1
-          class="text-4xl font-bold bg-linear-to-r from-slate-800 to-slate-700 bg-clip-text text-transparent"
+        <p
+          class="text-lg font-semibold text-gray-900"
         >
           Orders
-        </h1>
-      </div>
-      <p class="text-slate-500 text-sm ml-5">
-        Track and manage all customer orders in one place
       </p>
+      </div>
     </div>
 
     <div class="relative w-full sm:w-96">
@@ -42,7 +36,7 @@
         @input="handleSearch"
         type="text"
         placeholder="Search by order ID or email..."
-        class="w-full pl-12 pr-5 py-3.5 rounded-2xl border-2 border-slate-200 bg-white/80 backdrop-blur-sm shadow-lg focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20 outline-none transition-all duration-300 text-slate-700 placeholder-slate-400"
+        class="w-full pl-12 pr-5 py-2 rounded-lg border border-slate-200 text-slate-700 placeholder-slate-400 focus:outline-none focus:ring focus:ring-slate-300 focus:border-transparent focus:placeholder:text-white"
       />
     </div>
   </div>

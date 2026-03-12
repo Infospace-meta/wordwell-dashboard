@@ -2,7 +2,7 @@ import { ref } from 'vue'
 import { defineStore } from 'pinia'
 
 export const useSidebarStore = defineStore('sidebar', () => {
-  const visible = ref(undefined)
+  const visible = ref(true) // Start true so it's visible on desktop by default
   const unfoldable = ref(false)
 
   const toggleVisible = (value) => {

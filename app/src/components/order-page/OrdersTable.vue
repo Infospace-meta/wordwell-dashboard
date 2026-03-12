@@ -1,50 +1,48 @@
 <template>
-  <div
-    class="bg-white rounded-3xl border-2 border-slate-200 shadow-xl overflow-hidden"
-  >
+  <div class="bg-white rounded-lg overflow-hidden">
     <div class="overflow-x-auto">
       <table class="min-w-full text-sm">
         <thead>
           <tr
-            class="bg-linear-to-r from-slate-50 to-white border-b-2 border-slate-200"
+            class="border-b border-slate-200"
           >
-            <th class="px-6 py-5 text-left">
+            <th class="px-6 py-3 text-left">
               <span
                 class="text-xs font-semibold text-slate-500 uppercase tracking-wider"
                 >Order</span
               >
             </th>
-            <th class="px-6 py-5 text-left">
+            <th class="px-6 py-3 text-left">
               <span
                 class="text-xs font-semibold text-slate-500 uppercase tracking-wider"
                 >Deadline</span
               >
             </th>
-            <th class="px-6 py-5 text-left">
+            <th class="px-6 py-3 text-left">
               <span
                 class="text-xs font-semibold text-slate-500 uppercase tracking-wider"
                 >Words</span
               >
             </th>
-            <th class="px-6 py-5 text-left">
+            <th class="px-6 py-3 text-left">
               <span
                 class="text-xs font-semibold text-slate-500 uppercase tracking-wider"
                 >Amount</span
               >
             </th>
-            <th class="px-6 py-5 text-left">
+            <th class="px-6 py-3 text-left">
               <span
                 class="text-xs font-semibold text-slate-500 uppercase tracking-wider"
                 >Status</span
               >
             </th>
-            <th class="px-6 py-5 text-left">
+            <th class="px-6 py-3 text-left">
               <span
                 class="text-xs font-semibold text-slate-500 uppercase tracking-wider"
                 >Payment</span
               >
             </th>
-            <th class="px-6 py-5 text-right">
+            <th class="px-6 py-3 text-right">
               <span
                 class="text-xs font-semibold text-slate-500 uppercase tracking-wider"
                 >Actions</span
@@ -93,6 +91,6 @@ const filteredOrders = computed(() =>
       order.email.toLowerCase().includes(props.search.toLowerCase());
 
     return matchesFilter && matchesSearch;
-  }),
+  })
 );
 </script>

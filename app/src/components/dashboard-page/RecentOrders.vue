@@ -1,10 +1,10 @@
 <template>
-  <div class="bg-white rounded-xl shadow-sm p-6">
-    <h2 class="text-lg font-semibold mb-4">Recent Orders</h2>
+  <div class="bg-white rounded-xl border border-gray-200 p-6 h-[50vh] overflow-auto">
+    <p class="text-2xl mb-4">Recent Orders</p>
 
     <div class="overflow-x-auto">
       <table class="min-w-full divide-y divide-gray-200">
-        <thead class="bg-gray-50">
+        <thead class="bg-gray-100">
           <tr>
             <th
               class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
@@ -40,7 +40,7 @@
             @click="selectOrder(order.id.replace('#', ''))"
             class="hover:bg-gray-50 cursor-pointer transition-colors"
           >
-            <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">
+            <td class="px-6 py-4 whitespace-nowrap text-gray-700">
               #{{ order.order_number }}
             </td>
             <td class="px-6 py-4 whitespace-nowrap text-gray-500">
