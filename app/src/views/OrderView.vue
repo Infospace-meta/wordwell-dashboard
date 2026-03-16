@@ -14,6 +14,7 @@
             :orders="orderStore.orders"
             :search="search"
             :active-filter="activeFilter"
+            @select-order="orderStore.fetchOrderById"
           />
         </div>
       </div>
@@ -23,9 +24,9 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-import { useAuthStore, useOrderStore } from "@/store";
+import { useOrderStore } from "@/store";
 import OrdersHeader from "../components/order-page/OrdersHeader.vue";
-import OrdersStats from "../components/order-page/OrdersStats.vue";
+// import OrdersStats from "../components/order-page/OrdersStats.vue";
 import OrdersFilters from "../components/order-page/OrdersFilters.vue";
 import OrdersTable from "../components/order-page/OrdersTable.vue";
 

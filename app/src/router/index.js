@@ -5,6 +5,7 @@ import AuthConfirm from "../components/auth/AuthConfirm.vue";
 import { useAuthStore } from "../store";
 import DashboardView from "../views/DashboardView.vue";
 import OrderView from "../views/OrderView.vue";
+import EditOrderDynamicView from "../views/EditOrderDynamicView.vue";
 
 const routes = [
   {
@@ -15,6 +16,12 @@ const routes = [
     children: [
       { path: "dashboard", name: "dashboard", component: DashboardView },
       { path: "orders", name: "orders", component: OrderView },
+      {
+        path: "order/:id",
+        name: "order-edit",
+        component: EditOrderDynamicView,
+        props: true // This allows the :id to be passed as a prop to the component
+      }
     ],
   },
   { path: "/login", name: "login", component: LoginView },
