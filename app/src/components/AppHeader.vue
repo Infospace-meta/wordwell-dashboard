@@ -20,5 +20,9 @@
 <script setup>
 import AppHeaderDropdownAccnt from "@/components/AppHeaderDropdownAccnt.vue";
 import { useSidebarStore } from "@/store/sidebar.js";
+
+/**VARIABLES */
 const sidebar = useSidebarStore();
+
+/**FUNCTIONS */
 </script>

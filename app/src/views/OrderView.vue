@@ -11,7 +11,7 @@
           />
 
           <OrdersTable
-            :orders="orders"
+            :orders="orderStore.orders"
             :search="search"
             :active-filter="activeFilter"
           />
@@ -22,7 +22,8 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
+import { useAuthStore, useOrderStore } from "@/store";
 import OrdersHeader from "../components/order-page/OrdersHeader.vue";
 import OrdersStats from "../components/order-page/OrdersStats.vue";
 import OrdersFilters from "../components/order-page/OrdersFilters.vue";
@@ -32,33 +33,41 @@ import OrdersTable from "../components/order-page/OrdersTable.vue";
 const search = ref("");
 const activeFilter = ref("All");
 const filters = ["All", "Paid", "In Progress", "Completed", "Failed"];
-const orders = ref([
-  {
-    id: "#10234",
-    email: "john.doe@example.com",
-    deadline: "Apr 25, 2026",
-    words: 1500,
-    amount: "$120.00",
-    status: "In Progress",
-    payment: "Paid",
-  },
-  {
-    id: "#10212",
-    email: "sarah.smith@example.com",
-    deadline: "Apr 24, 2026",
-    words: 2000,
-    amount: "$180.00",
-    status: "Completed",
-    payment: "Paid",
-  },
-  {
-    id: "#10245",
-    email: "mike.wilson@example.com",
-    deadline: "Apr 26, 2026",
-    words: 3000,
-    amount: "$250.00",
-    status: "Failed",
-    payment: "Pending",
-  },
-]);
+
+const orderStore = useOrderStore();
+
+/**FUNCTIONS */
+/**Onload function */
+onMounted(async () => {
+  orderStore.fetchOrders();
+});
+// const orders = ref([
+//   {
+//     id: "#10234",
+//     email: "john.doe@example.com",
+//     deadline: "Apr 25, 2026",
+//     words: 1500,
+//     amount: "$120.00",
+//     status: "In Progress",
+//     payment: "Paid",
+//   },
+//   {
+//     id: "#10212",
+//     email: "sarah.smith@example.com",
+//     deadline: "Apr 24, 2026",
+//     words: 2000,
+//     amount: "$180.00",
+//     status: "Completed",
+//     payment: "Paid",
+//   },
+//   {
+//     id: "#10245",
+//     email: "mike.wilson@example.com",
+//     deadline: "Apr 26, 2026",
+//     words: 3000,
+//     amount: "$250.00",
+//     status: "Failed",
+//     payment: "Pending",
+//   },
+// ]);
 </script>
