@@ -1,7 +1,9 @@
 <template>
-  <div class="bg-white rounded-lg max-h-[55vh] overflow-auto border border-slate-200">
+  <div
+    class="bg-white rounded-lg max-h-[55vh] overflow-auto border border-slate-200"
+  >
     <div class="overflow-x-auto">
-      <table class="min-w-full text-sm ">
+      <table class="min-w-full text-sm">
         <thead class="border-b border-slate-200 bg-slate-50/50">
           <tr>
             <th
@@ -26,7 +28,7 @@
           </tr>
         </thead>
 
-        <tbody class="divide-y divide-slate-100 overflow-auto ">
+        <tbody class="divide-y divide-slate-100 overflow-auto">
           <!-- Loading State -->
           <tr v-if="loading">
             <td colspan="7" class="px-6 py-12 text-center text-slate-400">
@@ -60,9 +62,12 @@
             v-else
             v-for="order in filteredOrders"
             :key="order.id"
-            class="group hover:bg-slate-50 transition-all duration-200 "
+            class="group hover:bg-slate-50 transition-all duration-200"
           >
-            <td @click="handleView(order.id)" class="px-6 py-5 hover:cursor-pointer">
+            <td
+              @click="handleView(order.id)"
+              class="px-6 py-5 hover:cursor-pointer"
+            >
               <div class="flex flex-col">
                 <span class="font-semibold text-slate-900">{{
                   order.displayId || `#${order.id.slice(0, 5)}`
@@ -89,12 +94,11 @@
             </td>
 
             <td class="px-6 py-5 text-slate-600">
-              {{ order.deadline || "---" }}
+              {{ formatDeadline(order.deadline) }}
             </td>
 
             <td class="px-6 py-5 text-slate-600">
               {{ (order.words || 0).toLocaleString() }}
-              <span class="text-xs opacity-60">wds</span>
             </td>
 
             <td class="px-6 py-5">
@@ -231,20 +235,23 @@ const formatCurrency = (val) => {
   }).format(amount || 0);
 };
 
-// const getStatusClass = (status) => {
-//   const base =
-//     "px-2.5 py-1 rounded-full text-xs font-semibold uppercase tracking-tight ";
-//   switch (status?.toLowerCase()) {
-//     case "completed":
-//       return base + "bg-green-100 text-green-700";
-//     case "failed":
-//       return base + "bg-red-100 text-red-700";
-//     case "pending":
-//       return base + "bg-amber-100 text-amber-700";
-//     default:
-//       return base + "bg-slate-100 text-slate-700";
-//   }
-// };
+const formatDeadline = (dateString) => {
+  if (!dateString) return "---";
+
+  const date = new Date(dateString);
+
+  // Check if date is valid
+  if (isNaN(date.getTime())) return "Invalid Date";
+
+  return new Intl.DateTimeFormat("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+  }).format(date);
+};
 
 // Helper to make "PENDING_PAYMENT" look like "Pending"
 const formatStatus = (status) => {
