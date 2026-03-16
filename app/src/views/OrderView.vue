@@ -1,20 +1,28 @@
 <template>
-  <div>
-    <div class="mx-auto max-w-7xl p-6">
-      <div class="flex flex-col gap-2">
+  <div class="bg-slate-50/50">
+    <div class="mx-auto max-w-7xl p-4 md:p-8">
+      <div class="flex flex-col gap-6">
+        <!-- Header -->
         <OrdersHeader v-model:search="search" />
-        <!-- <OrdersStats :orders="orders" /> -->
-        <div class="border rounded-lg border-neutral-200">
-          <OrdersFilters
-            v-model:activeFilter="activeFilter"
-            :filters="filters"
-          />
 
+        <div
+          class="bg-white border rounded-xl shadow-sm border-slate-200 oveflow-auto"
+        >
+          <!-- Filter Tabs -->
+          <div class="px-4 border-b border-slate-100">
+            <OrdersFilters
+              v-model:activeFilter="activeFilter"
+              :filters="filters"
+            />
+          </div>
+
+          <!-- Table -->
           <OrdersTable
             :orders="orderStore.orders"
             :search="search"
             :active-filter="activeFilter"
-            @select-order="orderStore.fetchOrderById"
+            :loading="isLoading"
+            @select-order="onOrderSelect"
           />
         </div>
       </div>
@@ -26,49 +34,30 @@
 import { ref, onMounted } from "vue";
 import { useOrderStore } from "@/store";
 import OrdersHeader from "../components/order-page/OrdersHeader.vue";
-// import OrdersStats from "../components/order-page/OrdersStats.vue";
 import OrdersFilters from "../components/order-page/OrdersFilters.vue";
 import OrdersTable from "../components/order-page/OrdersTable.vue";
 
-/**VARIABLES */
 const search = ref("");
 const activeFilter = ref("All");
-const filters = ["All", "Paid", "In Progress", "Completed", "Failed"];
+const isLoading = ref(false);
+
+// Note: Ensure your API/Store uses these exact strings
+const filters = ["All", "Paid", "Pending"];
 
 const orderStore = useOrderStore();
 
-/**FUNCTIONS */
-/**Onload function */
+const onOrderSelect = (id) => {
+  orderStore.fetchOrderById(id);
+};
+
 onMounted(async () => {
-  orderStore.fetchOrders();
+  isLoading.value = true;
+  try {
+    await orderStore.fetchOrders();
+  } catch (error) {
+    console.error("Failed to load orders:", error);
+  } finally {
+    isLoading.value = false;
+  }
 });
-// const orders = ref([
-//   {
-//     id: "#10234",
-//     email: "john.doe@example.com",
-//     deadline: "Apr 25, 2026",
-//     words: 1500,
-//     amount: "$120.00",
-//     status: "In Progress",
-//     payment: "Paid",
-//   },
-//   {
-//     id: "#10212",
-//     email: "sarah.smith@example.com",
-//     deadline: "Apr 24, 2026",
-//     words: 2000,
-//     amount: "$180.00",
-//     status: "Completed",
-//     payment: "Paid",
-//   },
-//   {
-//     id: "#10245",
-//     email: "mike.wilson@example.com",
-//     deadline: "Apr 26, 2026",
-//     words: 3000,
-//     amount: "$250.00",
-//     status: "Failed",
-//     payment: "Pending",
-//   },
-// ]);
 </script>

@@ -53,6 +53,7 @@ export const useOrderStore = defineStore("orders", () => {
 
     try {
       const { data } = await api.get(`/orders`);
+      console.log(data)
       /**Map data for the RecentOrders table requirements */
       orders.value = data.map((order) => ({
         ...order,
@@ -101,11 +102,14 @@ export const useOrderStore = defineStore("orders", () => {
       const { data } = await api.patch(`/orders/${orderId}`, patchData);
 
       /**Find and update the order in our local list for instant reactivity */
+      // Inside your Pinia updateOrder action:
       const index = orders.value.findIndex((o) => o.id === orderId);
       if (index !== -1) {
         orders.value[index] = {
           ...orders.value[index],
           ...data,
+          // Add these mappings so the table doesn't "break" after an update
+          displayId: `#${data.order_number || orders.value[index].order_number}`,
           payment: data.status === "PAID" ? "Paid" : "Pending",
         };
       }
