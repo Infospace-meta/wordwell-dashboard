@@ -80,17 +80,17 @@
           </div>
           <div class="text-right">
             <span
-              :class="getStatusClasses(order.status)"
+              :class="getStatusClasses(order.payment_status)"
               class="inline-flex px-2.5 py-1 rounded-full text-xs font-medium shadow-sm"
             >
-              {{ formatStatus(order.status) }}
+              {{ formatStatus(order.payment_status) }}
             </span>
           </div>
         </div>
 
         <div class="flex flex-wrap gap-2">
           <button
-            v-if="order.status !== 'PAID'"
+            v-if="order.payment_status !== 'PAID'"
             :disabled="updatingStatus"
             @click="updatePayment('PAID')"
             class="px-3 py-1.5 bg-green-600 hover:bg-green-700 disabled:bg-green-400 disabled:cursor-not-allowed text-white text-xs font-medium rounded shadow-sm transition"
@@ -98,7 +98,10 @@
             {{ updatingStatus ? "..." : "Mark Paid" }}
           </button>
           <button
-            v-if="order.status === 'PAID' || order.status === 'IN_PROGRESS'"
+            v-if="
+              order.payment_status === 'PAID' ||
+              order.order_status === 'IN_PROGRESS'
+            "
             :disabled="updatingStatus"
             @click="updatePayment('PENDING_PAYMENT')"
             class="px-3 py-1.5 bg-amber-600 hover:bg-amber-700 disabled:bg-amber-400 disabled:cursor-not-allowed text-white text-xs font-medium rounded shadow-sm transition"
@@ -354,7 +357,7 @@ watch(
   (newOrder) => {
     editedOrder.value = { ...newOrder };
   },
-  { deep: true, immediate: true }
+  { deep: true, immediate: true },
 );
 
 const startEditing = () => {
@@ -421,6 +424,7 @@ const formatStatus = (status) =>
 const getStatusClasses = (status) => {
   const map = {
     PENDING_PAYMENT: "bg-amber-100 text-amber-800 border border-amber-200",
+    PENDING: "bg-amber-100 text-amber-800 border border-amber-200",
     PAID: "bg-green-100 text-green-800 border border-green-200",
     IN_PROGRESS: "bg-blue-100 text-blue-800 border border-blue-200",
     COMPLETED: "bg-emerald-100 text-emerald-800 border border-emerald-200",

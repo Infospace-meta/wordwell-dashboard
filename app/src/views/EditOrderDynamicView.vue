@@ -99,23 +99,23 @@
                   </p>
                 </div>
                 <span
-                  :class="getStatusClasses(order.status)"
+                  :class="getStatusClasses(order.payment_status)"
                   class="px-3 py-1 rounded-full text-xs font-bold shadow-sm"
                 >
-                  {{ formatStatus(order.status) }}
+                  {{ formatStatus(order.payment_status) }}
                 </span>
               </div>
 
               <div class="grid grid-cols-1 gap-2">
                 <button
-                  v-if="order.status !== 'PAID'"
+                  v-if="order.payment_status !== 'PAID'"
                   @click="updatePayment('PAID')"
                   class="w-full py-2 bg-green-600 text-white rounded-lg font-bold text-xs hover:bg-green-700 transition"
                 >
                   Mark as Paid
                 </button>
                 <button
-                  v-if="order.status === 'PAID'"
+                  v-if="order.payment_status === 'PAID'"
                   @click="updatePayment('PENDING_PAYMENT')"
                   class="w-full py-2 bg-amber-600 text-white rounded-lg font-bold text-xs hover:bg-amber-700 transition"
                 >
@@ -286,7 +286,7 @@ onMounted(async () => {
         id: id,
         order_number: "8821",
         total_price: 150.0,
-        status: "PENDING_PAYMENT",
+        payment_status: "PENDING_PAYMENT",
         service_type: "Essay Writing",
         academic_level: "Masters",
         subject: "History",
@@ -329,7 +329,7 @@ const saveChanges = async () => {
 };
 
 const updatePayment = (newStatus) => {
-  order.value.status = newStatus;
+  order.value.payment_status = newStatus;
   // await orderStore.updateStatus(order.value.id, newStatus);
 };
 
@@ -345,6 +345,7 @@ const formatStatus = (s) => s?.replace("_", " ");
 const getStatusClasses = (status) => {
   const map = {
     PENDING_PAYMENT: "bg-amber-100 text-amber-700",
+    PENDING: "bg-amber-100 text-amber-700",
     PAID: "bg-green-100 text-green-700",
     COMPLETED: "bg-blue-100 text-blue-700",
   };

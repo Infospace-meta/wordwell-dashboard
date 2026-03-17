@@ -26,7 +26,7 @@
 import AppSidebar from "@/components/AppSidebar.vue";
 import AppHeader from "@/components/AppHeader.vue";
 import { useSidebarStore } from "@/store/sidebar.js";
-import AppFooter from "../components/AppFooter.vue";
+import AppFooter from "@/components/AppFooter.vue";
 
 const sidebar = useSidebarStore();
 </script>

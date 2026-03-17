@@ -61,7 +61,7 @@ onMounted(async () => {
 
 /**Function to handle update */
 const handleUpdate = async ({ orderId, updates, newStatus }) => {
-  const payload = updates || { status: newStatus };
+  const payload = updates || { payment_status: newStatus };
   await orderStore.updateOrder(orderId, payload);
 };
 
@@ -73,6 +73,6 @@ const handleDelete = async (orderId) => {
 };
 
 const handleSuspend = async (orderId) => {
-  await orderStore.updateOrder(orderId, { status: "SUSPENDED" });
+  await orderStore.updateOrder(orderId, { order_status: "SUSPENDED" });
 };
 </script>
