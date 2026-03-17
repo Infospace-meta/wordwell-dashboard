@@ -22,9 +22,11 @@ export const useOrderStore = defineStore("orders", () => {
   const stats = computed(() => {
     const data = orders.value;
     const totalOrders = data.length;
-    const paid = data.filter((o) => o.status === "PAID").length;
-    const inProgress = data.filter((o) => o.status === "IN_PROGRESS").length;
-    const completed = data.filter((o) => o.status === "COMPLETED").length;
+    const paid = data.filter((o) => o.payment_status === "PAID").length;
+    const inProgress = data.filter(
+      (o) => o.order_status === "IN_PROGRESS",
+    ).length;
+    const completed = data.filter((o) => o.order_status === "COMPLETED").length;
     const revenue = data.reduce(
       (sum, o) => sum + Number(o.total_price || 0),
       0,
@@ -53,6 +55,7 @@ export const useOrderStore = defineStore("orders", () => {
 
     try {
       const { data } = await api.get(`/orders`);
+      console.log(data);
       /**Map data for the RecentOrders table requirements */
       orders.value = data.map((order) => ({
         ...order,
@@ -60,7 +63,7 @@ export const useOrderStore = defineStore("orders", () => {
         email: order.user?.email ?? "N/A",
         words: order.pages * 275,
         amount: `$${Number(order.total_price || 0).toFixed(2)}`,
-        payment: order.status === "PAID" ? "Paid" : "Pending",
+        payment: order.payment_status === "PAID" ? "Paid" : "Pending",
       }));
     } catch (err) {
       const errorMessage =
@@ -101,12 +104,15 @@ export const useOrderStore = defineStore("orders", () => {
       const { data } = await api.patch(`/orders/${orderId}`, patchData);
 
       /**Find and update the order in our local list for instant reactivity */
+      // Inside your Pinia updateOrder action:
       const index = orders.value.findIndex((o) => o.id === orderId);
       if (index !== -1) {
         orders.value[index] = {
           ...orders.value[index],
           ...data,
-          payment: data.status === "PAID" ? "Paid" : "Pending",
+          // Add these mappings so the table doesn't "break" after an update
+          displayId: `#${data.order_number || orders.value[index].order_number}`,
+          payment: data.payment_status === "PAID" ? "Paid" : "Pending",
         };
       }
 
