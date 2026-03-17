@@ -108,8 +108,8 @@
             </td>
 
             <td class="px-6 py-5">
-              <span :class="getStatusStyles(order.status)">
-                {{ formatStatus(order.status) }}
+              <span :class="getStatusStyles(order.order_status)">
+                {{ order.order_status }}
               </span>
             </td>
 
@@ -122,7 +122,7 @@
                 "
                 class="px-2.5 py-1 rounded-full text-xs font-medium border border-transparent"
               >
-                {{ order.payment }}
+                {{ formatStatus(order.payment_status) }}
               </span>
             </td>
 
