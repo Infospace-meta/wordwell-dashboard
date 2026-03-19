@@ -1,5 +1,7 @@
 <template>
-  <div class="bg-white rounded-xl border border-gray-200 p-6 h-[50vh] overflow-auto">
+  <div
+    class="bg-white rounded-xl border border-gray-200 p-6 h-[50vh] overflow-auto"
+  >
     <p class="text-2xl mb-4">Recent Orders</p>
 
     <div class="overflow-x-auto">
@@ -74,15 +76,16 @@
 </template>
 
 <script setup>
+/**VARIABLES */
 defineProps({
   orders: {
     type: Array,
     default: () => [],
   },
 });
-
 const emit = defineEmits(["select-order"]);
 
+/**FUNCTIONS */
 const selectOrder = (orderId) => {
   emit("select-order", orderId);
 };

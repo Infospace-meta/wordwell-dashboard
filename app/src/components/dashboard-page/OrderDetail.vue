@@ -87,7 +87,7 @@
             </span>
           </div>
         </div>
-
+        <!-- TO BE MODIFIED -->
         <div class="flex flex-wrap gap-2">
           <button
             v-if="order.payment_status !== 'PAID'"
@@ -330,6 +330,7 @@
 <script setup>
 import { ref, watch } from "vue";
 
+/**VARIABLES */
 const props = defineProps({
   order: {
     type: Object,
@@ -351,7 +352,8 @@ const saving = ref(false);
 const updatingStatus = ref(false);
 const isActionLoading = ref(false);
 
-// Sync editedOrder when order prop changes
+/**FUNCTIONS */
+/**Sync editedOrder when order prop changes */
 watch(
   () => props.order,
   (newOrder) => {
@@ -360,18 +362,22 @@ watch(
   { deep: true, immediate: true },
 );
 
+/**Function to initiate editting */
 const startEditing = () => {
   isEditing.value = true;
   editedOrder.value = { ...props.order };
 };
 
+/**Function to cancel Edit */
 const cancelEdit = () => {
   isEditing.value = false;
 };
 
+/**Function to save changes */
 const saveChanges = async () => {
   saving.value = true;
 
+  /**prepare payload */
   const payload = {
     service_type: editedOrder.value.service_type,
     academic_level: editedOrder.value.academic_level,
@@ -382,6 +388,7 @@ const saveChanges = async () => {
     instructions: editedOrder.value.instructions?.trim() || null,
   };
 
+  /**Emit action */
   emit("update-order", {
     orderId: props.order.id,
     updates: payload,
@@ -391,7 +398,7 @@ const saveChanges = async () => {
   isEditing.value = false; // auto-exit edit mode after save (optimistic)
 };
 
-// Quick payment status
+/**Quick payment status */
 const updatePayment = async (newStatus) => {
   if (!confirm(`Set status to "${formatStatus(newStatus)}"?`)) return;
 
@@ -400,7 +407,7 @@ const updatePayment = async (newStatus) => {
   updatingStatus.value = false;
 };
 
-// Actions
+/**Actions */
 const confirmAction = (type) => {
   let msg =
     type === "delete"
@@ -414,13 +421,14 @@ const confirmAction = (type) => {
   isActionLoading.value = false;
 };
 
-// Helpers
+/**Helpers */
 const formatStatus = (status) =>
   status
     .toLowerCase()
     .replace(/_/g, " ")
     .replace(/\b\w/g, (l) => l.toUpperCase());
 
+/**Function to get status classes */
 const getStatusClasses = (status) => {
   const map = {
     PENDING_PAYMENT: "bg-amber-100 text-amber-800 border border-amber-200",
