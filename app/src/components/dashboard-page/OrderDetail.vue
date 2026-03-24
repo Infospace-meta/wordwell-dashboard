@@ -87,7 +87,7 @@
             </span>
           </div>
         </div>
-
+        <!-- TO BE MODIFIED -->
         <div class="flex flex-wrap gap-2">
           <button
             v-if="order.payment_status !== 'PAID'"
@@ -252,35 +252,74 @@
       <!-- Files -->
       <section v-if="order.files?.length">
         <h3 class="text-xs font-semibold uppercase text-gray-500 mb-1.5">
-          Files ({{ order.files.length }})
+          Customer Attachments ({{ order.files.length }})
         </h3>
-        <div class="space-y-1">
-          <a
+        <div class="space-y-2">
+          <button
             v-for="file in order.files"
             :key="file.id"
-            :href="file.file_url"
-            target="_blank"
-            class="flex items-center gap-2.5 p-2.5 bg-gray-50 hover:bg-gray-100 rounded border border-gray-200 transition text-sm group"
+            @click="handleDownload(file)"
+            :disabled="downloadingFileId === file.id"
+            class="w-full flex items-center justify-between p-3 bg-gray-50 hover:bg-indigo-50 rounded-lg border border-gray-200 transition group text-left disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            <svg
-              class="w-4 h-4 text-blue-500"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-              />
-            </svg>
-            <span
-              class="truncate font-medium text-gray-800 group-hover:text-blue-700"
-            >
-              {{ file.file_name }}
-            </span>
-          </a>
+            <div class="flex items-center gap-3 overflow-hidden">
+              <svg
+                class="w-5 h-5 text-blue-500 shrink-0"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                />
+              </svg>
+              <span
+                class="truncate font-medium text-gray-800 group-hover:text-indigo-700"
+              >
+                {{ file.file_name }}
+              </span>
+            </div>
+
+            <!-- Icon/Loading State -->
+            <div class="flex items-center text-indigo-600">
+              <svg
+                v-if="downloadingFileId === file.id"
+                class="animate-spin h-4 w-4"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  class="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  stroke-width="4"
+                ></circle>
+                <path
+                  class="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                ></path>
+              </svg>
+              <svg
+                v-else
+                class="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+                />
+              </svg>
+            </div>
+          </button>
         </div>
       </section>
     </div>
@@ -329,7 +368,9 @@
 
 <script setup>
 import { ref, watch } from "vue";
+import { supabase } from "../../providers/supabase";
 
+/**VARIABLES */
 const props = defineProps({
   order: {
     type: Object,
@@ -350,8 +391,10 @@ const editedOrder = ref({});
 const saving = ref(false);
 const updatingStatus = ref(false);
 const isActionLoading = ref(false);
+const downloadingFileId = ref(null);
 
-// Sync editedOrder when order prop changes
+/**FUNCTIONS */
+/**Sync editedOrder when order prop changes */
 watch(
   () => props.order,
   (newOrder) => {
@@ -360,18 +403,22 @@ watch(
   { deep: true, immediate: true },
 );
 
+/**Function to initiate editting */
 const startEditing = () => {
   isEditing.value = true;
   editedOrder.value = { ...props.order };
 };
 
+/**Function to cancel Edit */
 const cancelEdit = () => {
   isEditing.value = false;
 };
 
+/**Function to save changes */
 const saveChanges = async () => {
   saving.value = true;
 
+  /**prepare payload */
   const payload = {
     service_type: editedOrder.value.service_type,
     academic_level: editedOrder.value.academic_level,
@@ -382,6 +429,7 @@ const saveChanges = async () => {
     instructions: editedOrder.value.instructions?.trim() || null,
   };
 
+  /**Emit action */
   emit("update-order", {
     orderId: props.order.id,
     updates: payload,
@@ -391,7 +439,7 @@ const saveChanges = async () => {
   isEditing.value = false; // auto-exit edit mode after save (optimistic)
 };
 
-// Quick payment status
+/**Quick payment status */
 const updatePayment = async (newStatus) => {
   if (!confirm(`Set status to "${formatStatus(newStatus)}"?`)) return;
 
@@ -400,7 +448,7 @@ const updatePayment = async (newStatus) => {
   updatingStatus.value = false;
 };
 
-// Actions
+/**Actions */
 const confirmAction = (type) => {
   let msg =
     type === "delete"
@@ -414,13 +462,14 @@ const confirmAction = (type) => {
   isActionLoading.value = false;
 };
 
-// Helpers
+/**Helpers */
 const formatStatus = (status) =>
   status
     .toLowerCase()
     .replace(/_/g, " ")
     .replace(/\b\w/g, (l) => l.toUpperCase());
 
+/**Function to get status classes */
 const getStatusClasses = (status) => {
   const map = {
     PENDING_PAYMENT: "bg-amber-100 text-amber-800 border border-amber-200",
@@ -431,5 +480,30 @@ const getStatusClasses = (status) => {
     CANCELLED: "bg-red-100 text-red-800 border border-red-200",
   };
   return map[status] || "bg-gray-100 text-gray-700 border border-gray-200";
+};
+
+/**Function to Handles secure file downloading for Admin
+ * Generates a Signed URL that bypasses Private RLS for 60 seconds  */
+const handleDownload = async (file) => {
+  try {
+    downloadingFileId.value = file.id;
+
+    /**Generate the signed URL */
+    const { data, error } = await supabase.storage
+      .from("order-attachments")
+      .createSignedUrl(file.file_url, 60);
+
+    if (error) throw error;
+
+    /**Open the signed URL in a new tab to trigger download */
+    window.open(data.signedUrl, "_blank");
+  } catch (error) {
+    console.error("Secure download failed:", error.message);
+    alert(
+      "Could not access this file. Ensure you have administrator permissions.",
+    );
+  } finally {
+    downloadingFileId.value = null;
+  }
 };
 </script>
