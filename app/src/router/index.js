@@ -1,11 +1,11 @@
 import { createRouter, createWebHistory } from "vue-router";
 import DefaultLayout from "@/layouts/DefaultLayout.vue";
-import LoginView from "../views/LoginView.vue";
-import AuthConfirm from "../components/auth/AuthConfirm.vue";
-import { useAuthStore } from "../store";
-import DashboardView from "../views/DashboardView.vue";
-import OrderView from "../views/OrderView.vue";
-import EditOrderDynamicView from "../views/EditOrderDynamicView.vue";
+import LoginView from "@/views/LoginView.vue";
+import AuthConfirm from "@/components/auth/AuthConfirm.vue";
+import { useAuthStore } from "@/store";
+import DashboardView from "@/views/DashboardView.vue";
+import OrderView from "@/views/OrderView.vue";
+import EditOrderDynamicView from "@/views/EditOrderDynamicView.vue";
 
 const routes = [
   {

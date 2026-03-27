@@ -1,6 +1,6 @@
 import { ref, computed } from "vue";
 import { defineStore } from "pinia";
-import api from "../providers/api/axios";
+import api from "@/providers/api/axios";
 
 export const useOrderStore = defineStore("orders", () => {
   /**

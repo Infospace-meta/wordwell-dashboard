@@ -55,7 +55,7 @@ axiosInstance.interceptors.response.use(
         console.warn("Unauthorized access (401). Logging out...");
         // Use dynamic import ONLY WHEN NEEDED inside the function
         try {
-          const { useAuthStore } = await import("../../store/auth.store");
+          const { useAuthStore } = await import("@/store/auth.store");
           const authStore = useAuthStore();
           /** Perform logout or redirect to the login page */
           authStore.logout();

@@ -368,7 +368,7 @@
 
 <script setup>
 import { ref, watch } from "vue";
-import { supabase } from "../../providers/supabase";
+import { supabase } from "@/providers/supabase";
 
 /**VARIABLES */
 const props = defineProps({
