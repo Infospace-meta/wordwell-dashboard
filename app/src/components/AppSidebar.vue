@@ -20,7 +20,7 @@
     <!-- Logo Section -->
     <div class="flex items-center justify-center h-16 py-15 overflow-hidden">
       <img
-        src="../assets/brand/InkWell-Writers-Logo.png"
+        src="@/assets/brand/InkWell-Writers-Logo.png"
         alt="Logo"
         :class="[
           sidebar.unfoldable ? 'hidden' : 'h-16',
