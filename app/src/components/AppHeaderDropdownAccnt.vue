@@ -53,7 +53,7 @@
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import avatar from "@/assets/images/avatars/8.jpg";
-import { useAuthStore } from "../store";
+import { useAuthStore } from "@/store";
 
 const isOpen = ref(false);
 const auth = useAuthStore();

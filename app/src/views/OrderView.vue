@@ -33,9 +33,9 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { useOrderStore } from "@/store";
-import OrdersHeader from "../components/order-page/OrdersHeader.vue";
-import OrdersFilters from "../components/order-page/OrdersFilters.vue";
-import OrdersTable from "../components/order-page/OrdersTable.vue";
+import OrdersHeader from "@/components/order-page/OrdersHeader.vue";
+import OrdersFilters from "@/components/order-page/OrdersFilters.vue";
+import OrdersTable from "@/components/order-page/OrdersTable.vue";
 
 const search = ref("");
 const activeFilter = ref("All");

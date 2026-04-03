@@ -12,7 +12,7 @@
         <!-- Logo -->
         <div class="mb-10 flex justify-center items-center">
           <img
-            src="../../assets/brand/InkWell-Writers-Logo.png"
+            src="@/assets/brand/InkWell-Writers-Logo.png"
             alt="wordwell Logo"
             class="w-54 h-auto"
           />
@@ -115,7 +115,7 @@
 
 <script setup>
 import { ref, watch } from "vue";
-import { useAuthStore } from "../../store";
+import { useAuthStore } from "@/store";
 
 /**VARIABLES */
 const email = ref("");

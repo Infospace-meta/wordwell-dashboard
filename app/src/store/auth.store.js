@@ -1,7 +1,7 @@
 import { computed, ref } from "vue";
 import { defineStore } from "pinia";
-import { supabase } from "../providers/supabase";
-import api from "../providers/api/axios";
+import { supabase } from "@/providers/supabase";
+import api from "@/providers/api/axios";
 
 export const useAuthStore = defineStore("auth", () => {
   /**VARIABLES */
