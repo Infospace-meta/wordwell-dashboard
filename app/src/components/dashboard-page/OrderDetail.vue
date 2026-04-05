@@ -437,7 +437,7 @@ const saveChanges = async () => {
   });
 
   saving.value = false;
-  isEditing.value = false; // auto-exit edit mode after save (optimistic)
+  isEditing.value = false;
 };
 
 /**Quick payment status */
