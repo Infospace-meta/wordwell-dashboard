@@ -69,6 +69,7 @@ onMounted(async () => {
       /**FAILURE: Not an Admin */
       await supabase.auth.signOut();
       localStorage.removeItem("x-token");
+      router.push("/login");
       throw new Error(
         "Access Denied: You do not have administrator privileges.",
       );
@@ -80,7 +81,7 @@ onMounted(async () => {
     /** Optional: Auto-redirect non-admins to the main site after 3 seconds */
     if (err.message.includes("Access Denied")) {
       setTimeout(() => {
-        window.location.href = "https://google.com";
+        window.location.href = "https://wordwellwriters.com";
       }, 3000);
     }
   }
