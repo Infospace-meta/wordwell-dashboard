@@ -88,7 +88,7 @@
           </div>
         </div>
         <!-- TO BE MODIFIED -->
-        <div class="flex flex-wrap gap-2">
+        <!-- <div class="flex flex-wrap gap-2">
           <button
             v-if="order.payment_status !== 'PAID'"
             :disabled="updatingStatus"
@@ -108,7 +108,7 @@
           >
             {{ updatingStatus ? "..." : "Revert Pending" }}
           </button>
-        </div>
+        </div> -->
       </section>
 
       <!-- Order Details – tighter grid -->
@@ -123,6 +123,7 @@
         </h3>
 
         <div class="grid grid-cols-2 gap-x-5 gap-y-3">
+          <!-- Service -->
           <div>
             <dt class="text-xs text-gray-500">Service</dt>
             <dd class="mt-0.5">
@@ -137,7 +138,7 @@
               }}</span>
             </dd>
           </div>
-
+          <!-- Level -->
           <div>
             <dt class="text-xs text-gray-500">Level</dt>
             <dd class="mt-0.5">
@@ -154,7 +155,7 @@
               <span v-else class="font-medium">{{ order.academic_level }}</span>
             </dd>
           </div>
-
+          <!-- Subject -->
           <div>
             <dt class="text-xs text-gray-500">Subject</dt>
             <dd class="mt-0.5">
@@ -167,7 +168,7 @@
               <span v-else class="font-medium">{{ order.subject }}</span>
             </dd>
           </div>
-
+          <!-- Pages -->
           <div>
             <dt class="text-xs text-gray-500">Pages</dt>
             <dd class="mt-0.5">
@@ -186,7 +187,7 @@
               </span>
             </dd>
           </div>
-
+          <!-- Citation -->
           <div>
             <dt class="text-xs text-gray-500">Citation</dt>
             <dd class="mt-0.5">
@@ -205,7 +206,7 @@
               }}</span>
             </dd>
           </div>
-
+          <!-- Deadline -->
           <div>
             <dt class="text-xs text-gray-500">Deadline</dt>
             <dd class="mt-0.5">
@@ -436,7 +437,7 @@ const saveChanges = async () => {
   });
 
   saving.value = false;
-  isEditing.value = false; // auto-exit edit mode after save (optimistic)
+  isEditing.value = false;
 };
 
 /**Quick payment status */
