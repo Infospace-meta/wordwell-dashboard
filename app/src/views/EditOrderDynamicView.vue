@@ -42,7 +42,10 @@
             ← Back to List
           </button>
           <h2 class="text-lg font-bold text-gray-900">
-            Order #{{ order.order_number || order.id }}
+            Order #{{
+              orderStore.selectedOrder.order_number ||
+              orderStore.selectedOrder.id
+            }}
           </h2>
         </div>
 
@@ -260,11 +263,11 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
-// import { useOrderStore } from "@/stores/orderStore"; // Example Store
+import { useOrderStore } from "@/store/orders.store";
 
 const route = useRoute();
 const router = useRouter();
-// const orderStore = useOrderStore();
+const orderStore = useOrderStore();
 
 /** STATE */
 const order = ref(null);
