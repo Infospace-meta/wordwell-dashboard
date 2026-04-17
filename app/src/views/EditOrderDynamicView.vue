@@ -1,8 +1,8 @@
 <template>
   <div class="p-6 max-w-5xl mx-auto">
-    <!-- Loading State -->
+    <!-- Loading State (Use store loading) -->
     <div
-      v-if="loading"
+      v-if="orderStore.loading"
       class="flex flex-col items-center justify-center h-64 text-gray-500"
     >
       <div
@@ -13,10 +13,10 @@
 
     <!-- Error State -->
     <div
-      v-else-if="error"
+      v-else-if="orderStore.error"
       class="bg-red-50 p-6 rounded-xl border border-red-200 text-center"
     >
-      <p class="text-red-700 font-medium">{{ error }}</p>
+      <p class="text-red-700 font-medium">{{ orderStore.error }}</p>
       <button
         @click="router.push('/orders')"
         class="mt-4 text-sm text-indigo-600 underline"
@@ -25,9 +25,9 @@
       </button>
     </div>
 
-    <!-- Main Content -->
+    <!-- Main Content (Show only if selectedOrder exists) -->
     <div
-      v-else
+      v-else-if="orderStore.selectedOrder"
       class="bg-white rounded-xl border border-gray-200 shadow-sm flex flex-col overflow-hidden"
     >
       <!-- Header -->
@@ -42,10 +42,7 @@
             ← Back to List
           </button>
           <h2 class="text-lg font-bold text-gray-900">
-            Order #{{
-              orderStore.selectedOrder.order_number ||
-              orderStore.selectedOrder.id
-            }}
+            Order #{{ orderStore.selectedOrder.order_number }}
           </h2>
         </div>
 
@@ -73,16 +70,18 @@
               </h3>
               <div class="bg-gray-50 rounded-xl p-4 border border-gray-100">
                 <p class="font-bold text-gray-900 text-base">
-                  {{ order.user?.full_name || "N/A" }}
+                  {{ orderStore.selectedOrder.user?.full_name || "N/A" }}
                 </p>
-                <p class="text-gray-600 mt-1">{{ order.user?.email }}</p>
+                <p class="text-gray-600 mt-1">
+                  {{ orderStore.selectedOrder.user?.email }}
+                </p>
                 <p class="mt-2 flex items-center gap-2 text-gray-600">
                   <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                     <path
                       d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"
                     />
                   </svg>
-                  {{ order.user?.whatsapp_no || "No Phone" }}
+                  {{ orderStore.selectedOrder.user?.whatsapp_no || "No Phone" }}
                 </p>
               </div>
             </section>
@@ -98,27 +97,31 @@
                     Total Price
                   </p>
                   <p class="text-2xl font-black text-emerald-700">
-                    ${{ Number(order.total_price).toFixed(2) }}
+                    ${{
+                      Number(orderStore.selectedOrder.total_price).toFixed(2)
+                    }}
                   </p>
                 </div>
                 <span
-                  :class="getStatusClasses(order.payment_status)"
-                  class="px-3 py-1 rounded-full text-xs font-bold shadow-sm"
+                  :class="
+                    getStatusClasses(orderStore.selectedOrder.payment_status)
+                  "
+                  class="px-3 py-1 rounded-full text-[10px] font-bold shadow-sm uppercase"
                 >
-                  {{ formatStatus(order.payment_status) }}
+                  {{ formatStatus(orderStore.selectedOrder.payment_status) }}
                 </span>
               </div>
 
               <div class="grid grid-cols-1 gap-2">
                 <button
-                  v-if="order.payment_status !== 'PAID'"
+                  v-if="orderStore.selectedOrder.payment_status !== 'PAID'"
                   @click="updatePayment('PAID')"
                   class="w-full py-2 bg-green-600 text-white rounded-lg font-bold text-xs hover:bg-green-700 transition"
                 >
                   Mark as Paid
                 </button>
                 <button
-                  v-if="order.payment_status === 'PAID'"
+                  v-else
                   @click="updatePayment('PENDING_PAYMENT')"
                   class="w-full py-2 bg-amber-600 text-white rounded-lg font-bold text-xs hover:bg-amber-700 transition"
                 >
@@ -128,7 +131,7 @@
             </section>
           </div>
 
-          <!-- Right Column: Order Configuration -->
+          <!-- Right Column: Configuration -->
           <div class="md:col-span-2 space-y-8">
             <section>
               <h3
@@ -160,20 +163,10 @@
                     {{ field.replace("_", " ") }}
                   </dt>
                   <dd>
-                    <!-- Inputs for Editing -->
+                    <!-- EDIT MODE -->
                     <template v-if="isEditing">
-                      <input
-                        v-if="
-                          field !== 'academic_level' &&
-                          field !== 'citation_style' &&
-                          field !== 'deadline'
-                        "
-                        v-model="editedOrder[field]"
-                        class="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-indigo-500 outline-none"
-                      />
-
                       <select
-                        v-else-if="field === 'academic_level'"
+                        v-if="field === 'academic_level'"
                         v-model="editedOrder.academic_level"
                         class="w-full p-2 border border-gray-300 rounded"
                       >
@@ -181,24 +174,28 @@
                         <option value="masters">Masters</option>
                         <option value="PHD">PhD</option>
                       </select>
-
                       <input
                         v-else-if="field === 'deadline'"
                         type="datetime-local"
                         v-model="editedOrder.deadline"
                         class="w-full p-2 border border-gray-300 rounded"
                       />
+                      <input
+                        v-else
+                        v-model="editedOrder[field]"
+                        class="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-indigo-500 outline-none"
+                      />
                     </template>
 
-                    <!-- View Mode -->
+                    <!-- VIEW MODE -->
                     <span
                       v-else
                       class="text-sm font-semibold text-gray-800 capitalize"
                     >
                       {{
                         field === "deadline"
-                          ? new Date(order[field]).toLocaleString()
-                          : order[field]
+                          ? formatDate(orderStore.selectedOrder[field])
+                          : orderStore.selectedOrder[field]
                       }}
                     </span>
                   </dd>
@@ -222,14 +219,17 @@
                 v-else
                 class="p-4 bg-gray-50 rounded-xl border border-gray-100 text-gray-700 whitespace-pre-wrap"
               >
-                {{ order.instructions || "No instructions provided." }}
+                {{
+                  orderStore.selectedOrder.instructions ||
+                  "No instructions provided."
+                }}
               </div>
             </section>
           </div>
         </div>
       </div>
 
-      <!-- Footer Actions -->
+      <!-- Footer -->
       <div
         class="border-t border-gray-200 px-6 py-4 bg-gray-50 flex justify-end gap-3"
       >
@@ -242,9 +242,10 @@
           </button>
           <button
             @click="saveChanges"
-            class="px-6 py-2 bg-indigo-600 text-white rounded-lg text-sm font-bold shadow-md hover:bg-indigo-700"
+            :disabled="orderStore.loading"
+            class="px-6 py-2 bg-indigo-600 text-white rounded-lg text-sm font-bold shadow-md hover:bg-indigo-700 disabled:bg-slate-400"
           >
-            Save Changes
+            {{ orderStore.loading ? "Saving..." : "Save Changes" }}
           </button>
         </template>
         <template v-else>
@@ -263,57 +264,28 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { useOrderStore } from "@/store/orders.store";
+import { useOrderStore } from "../store/orders.store";
 
 const route = useRoute();
 const router = useRouter();
 const orderStore = useOrderStore();
 
 /** STATE */
-const order = ref(null);
-const editedOrder = ref({});
-const loading = ref(true);
-const error = ref(null);
 const isEditing = ref(false);
+const editedOrder = ref({});
 
 /** FETCH DATA ON LOAD */
 onMounted(async () => {
-  try {
-    const id = route.params.id;
-    // Mocking an API call - Replace this with your actual store/API logic
-    // const data = await orderStore.fetchOrderById(id);
-
-    // TEMPORARY MOCK DATA FOR TESTING
-    setTimeout(() => {
-      order.value = {
-        id: id,
-        order_number: "8821",
-        total_price: 150.0,
-        payment_status: "PENDING_PAYMENT",
-        service_type: "Essay Writing",
-        academic_level: "Masters",
-        subject: "History",
-        pages: 5,
-        citation_style: "APA",
-        deadline: "2023-12-31T23:59",
-        instructions: "Please follow the guidelines carefully.",
-        user: {
-          full_name: "John Doe",
-          email: "john@example.com",
-          whatsapp_no: "+123456789",
-        },
-      };
-      loading.value = false;
-    }, 500);
-  } catch (err) {
-    error.value = "Failed to load order details.";
-    loading.value = false;
+  const id = route.params.id;
+  if (id) {
+    await orderStore.fetchOrderById(id);
   }
 });
 
 /** METHODS */
 const startEditing = () => {
-  editedOrder.value = { ...order.value };
+  // Clone the store object to our local editor
+  editedOrder.value = { ...orderStore.selectedOrder };
   isEditing.value = true;
 };
 
@@ -322,34 +294,52 @@ const cancelEdit = () => {
 };
 
 const saveChanges = async () => {
-  // 1. Call your API/Store to update
-  // await orderStore.updateOrder(order.value.id, editedOrder.value);
-
-  // 2. Update local state (optimistic)
-  order.value = { ...editedOrder.value };
-  isEditing.value = false;
-  alert("Order updated successfully!");
+  try {
+    await orderStore.updateOrder(
+      orderStore.selectedOrder.id,
+      editedOrder.value,
+    );
+    isEditing.value = false;
+    alert("Order updated successfully!");
+  } catch (err) {
+    alert("Update failed.");
+  }
 };
 
-const updatePayment = (newStatus) => {
-  order.value.payment_status = newStatus;
-  // await orderStore.updateStatus(order.value.id, newStatus);
+const updatePayment = async (newStatus) => {
+  try {
+    await orderStore.updateOrder(orderStore.selectedOrder.id, {
+      payment_status: newStatus,
+    });
+  } catch (err) {
+    alert("Status update failed.");
+  }
 };
 
-const handleAction = (type) => {
-  if (confirm(`Are you sure you want to ${type} this order?`)) {
-    // await orderStore.deleteOrder(order.value.id);
+const handleAction = async (type) => {
+  if (
+    type === "delete" &&
+    confirm(`Are you sure you want to delete this order?`)
+  ) {
+    await orderStore.deleteOrder(orderStore.selectedOrder.id);
     router.push("/orders");
   }
 };
 
-const formatStatus = (s) => s?.replace("_", " ");
+const formatDate = (date) => {
+  if (!date) return "N/A";
+  return new Date(date).toLocaleString("en-KE", {
+    dateStyle: "medium",
+    timeStyle: "short",
+  });
+};
+
+const formatStatus = (s) => s?.replace("_", " ") || "Pending";
 
 const getStatusClasses = (status) => {
   const map = {
-    PENDING_PAYMENT: "bg-amber-100 text-amber-700",
-    PENDING: "bg-amber-100 text-amber-700",
     PAID: "bg-green-100 text-green-700",
+    PENDING_PAYMENT: "bg-amber-100 text-amber-700",
     COMPLETED: "bg-blue-100 text-blue-700",
   };
   return map[status] || "bg-gray-100 text-gray-700";

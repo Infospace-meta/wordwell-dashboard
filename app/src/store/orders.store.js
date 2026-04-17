@@ -95,6 +95,11 @@ export const useOrderStore = defineStore("orders", () => {
     }
   }
 
+  /**Update Order status */
+  async function updateOrderStatus(orderId, newStatus) {
+    return await updateOrder(orderId, { payment_status: newStatus });
+  }
+
   /**Update an existing order and local state */
   async function updateOrder(orderId, patchData) {
     loading.value = true;
@@ -162,6 +167,7 @@ export const useOrderStore = defineStore("orders", () => {
     fetchOrders,
     fetchOrderById,
     updateOrder,
+    updateOrderStatus,
     deleteOrder,
   };
 });
