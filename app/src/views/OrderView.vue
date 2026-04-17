@@ -41,7 +41,7 @@ const search = ref("");
 const activeFilter = ref("All");
 const isLoading = ref(false);
 
-// Note: Ensure your API/Store uses these exact strings
+/**Note: Ensure your API/Store uses these exact strings */
 const filters = ["All", "Paid", "Pending"];
 
 const orderStore = useOrderStore();
