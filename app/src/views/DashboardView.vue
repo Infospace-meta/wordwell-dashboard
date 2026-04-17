@@ -3,9 +3,7 @@
     <main class="p-6 max-w-7xl mx-auto">
       <!-- Header -->
       <div class="mb-8">
-        <p class="text-4xl text-slate-800">
-          Welcome back, Admin 👋
-        </p>
+        <p class="text-4xl text-slate-800">Welcome back, Admin 👋</p>
       </div>
 
       <!-- Stats cards -->
@@ -22,9 +20,9 @@
 
         <div class="lg:col-span-1">
           <OrderDetail
-            v-if="orderStore.currentOrder"
-            :order="orderStore.currentOrder"
-            @close="orderStore.currentOrder = null"
+            v-if="orderStore.selectedOrder"
+            :order="orderStore.selectedOrder"
+            @close="orderStore.selectedOrder = null"
             @update-order="handleUpdate"
             @update-payment-status="handleUpdate"
             @delete-order="handleDelete"
