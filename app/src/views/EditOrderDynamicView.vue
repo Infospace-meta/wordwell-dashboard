@@ -62,6 +62,7 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
           <!-- Left Column: Client & Status -->
           <div class="md:col-span-1 space-y-6">
+            <!-- Client Info Section -->
             <section>
               <h3
                 class="text-xs font-semibold uppercase text-gray-500 mb-3 tracking-wider"
@@ -86,6 +87,7 @@
               </div>
             </section>
 
+            <!-- Payment Status Section -->
             <section
               class="bg-emerald-50/50 rounded-xl p-4 border border-emerald-100"
             >
@@ -127,6 +129,51 @@
                 >
                   Revert to Pending
                 </button>
+              </div>
+            </section>
+
+            <!-- Order Progress Status Section -->
+            <section
+              class="bg-indigo-50/50 rounded-xl p-4 border border-indigo-100"
+            >
+              <div class="flex justify-between items-start mb-4">
+                <div>
+                  <p
+                    class="text-xs text-indigo-700 font-semibold uppercase tracking-wider"
+                  >
+                    Work Progress
+                  </p>
+                  <p class="text-lg font-bold text-indigo-900 mt-1">
+                    {{ formatStatus(orderStore.selectedOrder.order_status) }}
+                  </p>
+                </div>
+                <span
+                  :class="
+                    getOrderStatusClasses(orderStore.selectedOrder.order_status)
+                  "
+                  class="px-3 py-1 rounded-full text-[10px] font-bold shadow-sm uppercase border"
+                >
+                  {{ orderStore.selectedOrder.order_status }}
+                </span>
+              </div>
+
+              <!-- Status Change Selector -->
+              <div class="space-y-2">
+                <label
+                  class="text-[10px] font-bold text-indigo-400 uppercase tracking-tighter"
+                  >Update Status</label
+                >
+                <select
+                  :value="orderStore.selectedOrder.order_status"
+                  @change="(e) => updateOrderStatus(e.target.value)"
+                  class="w-full p-2 bg-white border border-indigo-200 rounded-lg text-xs font-medium focus:ring-2 focus:ring-indigo-500 outline-none cursor-pointer"
+                >
+                  <option value="PENDING">Pending</option>
+                  <option value="IN_PROGRESS">In Progress</option>
+                  <option value="COMPLETED">Completed</option>
+                  <option value="REVISION">Revision</option>
+                  <option value="SUSPENDED">Suspended</option>
+                </select>
               </div>
             </section>
           </div>
@@ -340,8 +387,32 @@ const getStatusClasses = (status) => {
   const map = {
     PAID: "bg-green-100 text-green-700",
     PENDING_PAYMENT: "bg-amber-100 text-amber-700",
-    COMPLETED: "bg-blue-100 text-blue-700",
   };
   return map[status] || "bg-gray-100 text-gray-700";
+};
+
+/**Colors for Order Status (Work Progress) */
+const getOrderStatusClasses = (status) => {
+  const map = {
+    PENDING: "bg-amber-100 text-amber-700 border-amber-200",
+    IN_PROGRESS: "bg-blue-100 text-blue-700 border-blue-200",
+    COMPLETED: "bg-emerald-100 text-emerald-700 border-emerald-200",
+    REVISION: "bg-rose-100 text-rose-700 border-rose-200",
+    SUSPENDED: "bg-slate-100 text-slate-700 border-slate-200",
+  };
+  return map[status] || "bg-gray-100 text-gray-700";
+};
+
+/**Update Order */
+const updateOrderStatus = async (newStatus) => {
+  try {
+    /**Call store update order */
+    await orderStore.updateOrderStatus(orderStore.selectedOrder.id, {
+      order_status: newStatus,
+    });
+    alert(`Order status updated to ${newStatus}`);
+  } catch (error) {
+    alert("Failed to update work status.");
+  }
 };
 </script>

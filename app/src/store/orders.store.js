@@ -95,11 +95,6 @@ export const useOrderStore = defineStore("orders", () => {
     }
   }
 
-  /**Update Order status */
-  async function updateOrderStatus(orderId, newStatus) {
-    return await updateOrder(orderId, { payment_status: newStatus });
-  }
-
   /**Update an existing order and local state */
   async function updateOrder(orderId, patchData) {
     loading.value = true;
@@ -120,6 +115,30 @@ export const useOrderStore = defineStore("orders", () => {
           payment: data.payment_status === "PAID" ? "Paid" : "Pending",
         };
       }
+
+      /**Update current selected view */
+      if (selectedOrder.value?.id === orderId) {
+        selectedOrder.value = { ...selectedOrder.value, ...data };
+      }
+      return data;
+    } catch (err) {
+      const errorMessage =
+        err.response?.data?.message || "Failed to update order.";
+      error.value = errorMessage;
+      console.error("Error updating order:", err);
+      throw new Error(errorMessage);
+    } finally {
+      loading.value = false;
+    }
+  }
+
+  /**Update Order status */
+  async function updateOrderStatus(orderId, patchData) {
+    loading.value = true;
+    error.value = null;
+
+    try {
+      const { data } = await api.patch(`/orders/status/${orderId}`, patchData);
 
       /**Update current selected view */
       if (selectedOrder.value?.id === orderId) {
