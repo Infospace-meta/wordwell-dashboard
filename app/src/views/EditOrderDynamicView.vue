@@ -114,7 +114,8 @@
                 </span>
               </div>
 
-              <div class="grid grid-cols-1 gap-2">
+              <!-- Update Payment Buttons -->
+              <!-- <div class="grid grid-cols-1 gap-2">
                 <button
                   v-if="orderStore.selectedOrder.payment_status !== 'PAID'"
                   @click="updatePayment('PAID')"
@@ -129,7 +130,7 @@
                 >
                   Revert to Pending
                 </button>
-              </div>
+              </div> -->
             </section>
 
             <!-- Order Progress Status Section -->
@@ -313,15 +314,16 @@ import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useOrderStore } from "../store/orders.store";
 
+/**VARIABLES */
 const route = useRoute();
 const router = useRouter();
 const orderStore = useOrderStore();
-
-/** STATE */
+/** State */
 const isEditing = ref(false);
 const editedOrder = ref({});
 
-/** FETCH DATA ON LOAD */
+/**FUNCTIONS */
+/** Fetch data onMount */
 onMounted(async () => {
   const id = route.params.id;
   if (id) {
@@ -329,17 +331,26 @@ onMounted(async () => {
   }
 });
 
-/** METHODS */
+/**Function to trigger edit */
 const startEditing = () => {
-  // Clone the store object to our local editor
-  editedOrder.value = { ...orderStore.selectedOrder };
+  /**Capture selected order */
+  const selectedOrder = { ...orderStore.selectedOrder };
+
+  /**separate orderdata from other fields to match api dto */
+  const { id, order_number, user_id, user, total_price, ...orderData } =
+    selectedOrder;
+
+  /**Clone the store object to our local editor */
+  editedOrder.value = { ...orderData };
   isEditing.value = true;
 };
 
+/**Function to cancel edit */
 const cancelEdit = () => {
   isEditing.value = false;
 };
 
+/**Function to save changes */
 const saveChanges = async () => {
   try {
     await orderStore.updateOrder(
@@ -353,6 +364,7 @@ const saveChanges = async () => {
   }
 };
 
+/**Function to update payment */
 const updatePayment = async (newStatus) => {
   try {
     await orderStore.updateOrder(orderStore.selectedOrder.id, {
@@ -363,6 +375,7 @@ const updatePayment = async (newStatus) => {
   }
 };
 
+/**Function to handle delete action */
 const handleAction = async (type) => {
   if (
     type === "delete" &&
@@ -373,6 +386,7 @@ const handleAction = async (type) => {
   }
 };
 
+/**Function to format date */
 const formatDate = (date) => {
   if (!date) return "N/A";
   return new Date(date).toLocaleString("en-KE", {
@@ -381,8 +395,10 @@ const formatDate = (date) => {
   });
 };
 
+/**Function to format status */
 const formatStatus = (s) => s?.replace("_", " ") || "Pending";
 
+/**Function to apply styling */
 const getStatusClasses = (status) => {
   const map = {
     PAID: "bg-green-100 text-green-700",
@@ -403,7 +419,7 @@ const getOrderStatusClasses = (status) => {
   return map[status] || "bg-gray-100 text-gray-700";
 };
 
-/**Update Order */
+/**Function to update orderstatus */
 const updateOrderStatus = async (newStatus) => {
   try {
     /**Call store update order */
