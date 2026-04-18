@@ -253,7 +253,7 @@ const formatDeadline = (dateString) => {
   }).format(date);
 };
 
-// Helper to make "PENDING_PAYMENT" look like "Pending"
+/**Helper to make "PENDING_PAYMENT" look like "Pending" */
 const formatStatus = (status) => {
   if (!status) return "Unknown";
   return status.replace("_", " ").toLowerCase();

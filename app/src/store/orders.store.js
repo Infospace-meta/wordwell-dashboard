@@ -6,12 +6,12 @@ export const useOrderStore = defineStore("orders", () => {
   /**
    * STATE
    * - `orders`: Holds the list of orders for the current view.
-   * - `currentOrder`: Holds a single order, typically for an "edit" view.
+   * - `selectedOrder`: Holds a single order, typically for an "edit" view.
    * - `loading`: A boolean to track when any API call is in progress.
    * - `error`: A string to hold the last error message for display.
    */
   const orders = ref([]);
-  const currentOrder = ref(null);
+  const selectedOrder = ref(null);
   const loading = ref(false);
   const error = ref(null);
 
@@ -80,11 +80,11 @@ export const useOrderStore = defineStore("orders", () => {
   async function fetchOrderById(orderId) {
     loading.value = true;
     error.value = null;
-    currentOrder.value = null; // Reset previous state
+    selectedOrder.value = null; // Reset previous state
 
     try {
       const { data } = await api.get(`/orders/${orderId}`);
-      currentOrder.value = data;
+      selectedOrder.value = data;
     } catch (err) {
       const errorMessage = err.response?.data?.message || "Order not found.";
       error.value = errorMessage;
@@ -117,8 +117,32 @@ export const useOrderStore = defineStore("orders", () => {
       }
 
       /**Update current selected view */
-      if (currentOrder.value?.id === orderId) {
-        currentOrder.value = { ...currentOrder.value, ...data };
+      if (selectedOrder.value?.id === orderId) {
+        selectedOrder.value = { ...selectedOrder.value, ...data };
+      }
+      return data;
+    } catch (err) {
+      const errorMessage =
+        err.response?.data?.message || "Failed to update order.";
+      error.value = errorMessage;
+      console.error("Error updating order:", err);
+      throw new Error(errorMessage);
+    } finally {
+      loading.value = false;
+    }
+  }
+
+  /**Update Order status */
+  async function updateOrderStatus(orderId, patchData) {
+    loading.value = true;
+    error.value = null;
+
+    try {
+      const { data } = await api.patch(`/orders/status/${orderId}`, patchData);
+
+      /**Update current selected view */
+      if (selectedOrder.value?.id === orderId) {
+        selectedOrder.value = { ...selectedOrder.value, ...data };
       }
       return data;
     } catch (err) {
@@ -155,13 +179,14 @@ export const useOrderStore = defineStore("orders", () => {
   /**RETURN SECTION */
   return {
     orders,
-    currentOrder,
+    selectedOrder,
     loading,
     error,
     stats,
     fetchOrders,
     fetchOrderById,
     updateOrder,
+    updateOrderStatus,
     deleteOrder,
   };
 });
